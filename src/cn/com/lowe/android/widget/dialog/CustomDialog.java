@@ -14,7 +14,6 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,20 +38,34 @@ public class CustomDialog extends Dialog {
 	private Config config;
 	private int screenWidth;
 	private int screenHeight;
+	// 暂时不用
+	@SuppressWarnings("unused")
 	private int titleHeight;
 	private int dialogWidth;
 	private int dialogHeiht;
 
 	public CustomDialog(Context context, int viewResourceId) {
-		this(context, viewResourceId, null);
+		this(context, viewResourceId, null, 0);
+	}
+
+	public CustomDialog(Context context, int viewResourceId, int theme) {
+		this(context, viewResourceId, null, theme);
 	}
 
 	public CustomDialog(Context context, DialogCreateListener viewCreateListener) {
-		this(context, 0, viewCreateListener);
+		this(context, 0, viewCreateListener, 0);
+	}
+
+	public CustomDialog(Context context, DialogCreateListener viewCreateListener, int theme) {
+		this(context, 0, viewCreateListener, theme);
 	}
 
 	public CustomDialog(Context context, int viewResourceId, DialogCreateListener viewCreateListener) {
-		super(context);
+		this(context, viewResourceId, viewCreateListener, 0);
+	}
+
+	public CustomDialog(Context context, int viewResourceId, DialogCreateListener viewCreateListener, int theme) {
+		super(context, theme);
 		this.context = context;
 		this.viewResourceId = viewResourceId;
 		this.viewCreateListener = viewCreateListener;
@@ -77,6 +90,20 @@ public class CustomDialog extends Dialog {
 		initConfig();
 	}
 
+	@Override
+	@Deprecated
+	public void setTitle(CharSequence title) {
+		// TODO Auto-generated method stub
+		super.setTitle(title);
+	}
+
+	@Override
+	@Deprecated
+	public void setTitle(int titleId) {
+		// TODO Auto-generated method stub
+		super.setTitle(titleId);
+	}
+
 	private void initConfig() {
 		if (config.titleIcon != null) {
 			titleIconView.setImageDrawable(config.titleIcon);
@@ -84,15 +111,15 @@ public class CustomDialog extends Dialog {
 		if (!TextUtils.isEmpty(config.titleText)) {
 			titleView.setText(config.titleText);
 		}
-		if (config.titleTextColor != -1) {
+		if (config.titleTextColor != Integer.MAX_VALUE) {
 			titleView.setTextColor(config.titleTextColor);
 		}
-		if (config.titleBgColor != -1) {
+		if (config.titleBgColor != Integer.MAX_VALUE) {
 			titleContentView.setBackgroundColor(config.titleBgColor);
 		} else if (config.titleBgImage != null) {
 			titleContentView.setBackground(config.titleBgImage);
 		}
-		if (config.contentBgColor != -1) {
+		if (config.contentBgColor != Integer.MAX_VALUE) {
 			contentView.setBackgroundColor(config.contentBgColor);
 		} else if (config.contentBgImage != null) {
 			contentView.setBackground(config.contentBgImage);
@@ -122,11 +149,12 @@ public class CustomDialog extends Dialog {
 			dialogHeiht = (int) WRAP_CONTENT;
 		}
 
-		// 高度需要剔除标题高度
-		if (dialogHeiht != WRAP_CONTENT) {
-			dialogHeiht -= titleHeight;
-		}
-		contentView.setLayoutParams(new LayoutParams(dialogWidth, dialogHeiht));
+		// 高度需要剔除标题高 度
+		// 取到的高度一直为0，还没找到解决方案
+		// if (dialogHeiht != WRAP_CONTENT) {
+		// dialogHeiht -= titleHeight;
+		// }
+		contentView.setLayoutParams(new LinearLayout.LayoutParams(dialogWidth, dialogHeiht));
 	}
 
 	private void createContentUI() {
@@ -146,10 +174,6 @@ public class CustomDialog extends Dialog {
 		return super.onSaveInstanceState();
 	}
 
-	public interface DialogChangeListener {
-
-	}
-
 	public interface DialogCreateListener {
 		public void onCreate(LinearLayout contentRootView);
 	}
@@ -159,14 +183,13 @@ public class CustomDialog extends Dialog {
 		private static final long serialVersionUID = 1L;
 		public Drawable titleIcon;
 		public String titleText;
-		public int titleTextColor = -1;
-		public int titleBgColor = -1;
+		public int titleTextColor = Integer.MAX_VALUE;
+		public int titleBgColor = Integer.MAX_VALUE;
 		public Drawable titleBgImage;
-		public int contentBgColor = -1;
+		public int contentBgColor = Integer.MAX_VALUE;
 		public Drawable contentBgImage;
-		public float heightPercent;
-		public float widthPercent;
-
+		public float heightPercent = WRAP_CONTENT;
+		public float widthPercent = WRAP_CONTENT;
 	}
 
 	// 对话框配置-begin
@@ -280,7 +303,7 @@ public class CustomDialog extends Dialog {
 	 */
 	public void setTitleBgImage(Drawable drawable) {
 		this.config.titleBgImage = drawable;
-		this.config.titleBgColor = -1;
+		this.config.titleBgColor = Integer.MAX_VALUE;
 	}
 
 	/**
@@ -308,7 +331,7 @@ public class CustomDialog extends Dialog {
 	 */
 	public void setContentBgImage(Drawable drawable) {
 		this.config.contentBgImage = drawable;
-		this.config.contentBgColor = -1;
+		this.config.contentBgColor = Integer.MAX_VALUE;
 	}
 
 	/**
