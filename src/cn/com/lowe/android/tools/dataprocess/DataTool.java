@@ -30,8 +30,6 @@ public class DataTool {
 		valueInterfaceMap.put(ValueUtil.class, new ValueUtil());
 		validationInterfaceMap.put(ValidationUtil.class, new ValidationUtil());
 	}
-	// 实体数据缓存，方便映射成对象时，不必重新取值，提高性能
-	private static WeakHashMap<View, Map<String, String>> cacheData = new WeakHashMap<View, Map<String, String>>();
 
 	public static ValidationResult validation(Class<?> entityClazz, View validView) {
 		Resources res = validView.getResources();
@@ -43,11 +41,7 @@ public class DataTool {
 		Class<?> fieldClass;
 		View fieldView;
 		StringBuffer errorBuf = new StringBuffer();
-		if (cacheData.get(validView.hashCode()) == null) {
-			Log.d(TAG, entityClazz.getName() + "未发现缓存数据,重新构造");
-			cacheData.put(validView, new HashMap<String, String>());
-		}
-		Map<String, String> entity = cacheData.get(validView);
+		Map<String, String> entity = new HashMap<String, String>();
 		for (Field field : fields) {
 			fieldName = field.getName();
 			fieldClass = field.getType();
@@ -112,18 +106,19 @@ public class DataTool {
 			vr.note = errorBuf.toString();
 		} else {
 			vr.success = true;
+			vr.entity=entity;
 		}
 		return vr;
 
 	}
 
-	public static Object getEntity(Class<?> entityClazz, View validView) throws IllegalAccessException, InstantiationException {
+	public static Object getEntity(Class<?> entityClazz, View validView,ValidationResult validationResult) throws IllegalAccessException, InstantiationException {
 		Field[] fields = entityClazz.getDeclaredFields();
 		FieldProperty fieldAnno;
 		String fieldName;
 		Class<?> fieldClass;
 		View fieldView;
-		Map<String, String> entity = cacheData.get(validView);
+		Map<String, String> entity = validationResult.entity;
 		boolean entityIsNull = (entity == null);
 		if (entityIsNull) {
 			Log.d(TAG, entityClazz.getName() + "取值过程中未发现缓存数据");

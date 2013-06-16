@@ -24,7 +24,8 @@ public class BeanActivity extends Activity {
 	}
 	public void construct(View view){
 		try {
-			Bean o=(Bean) DataTool.getEntity(Bean.class, viewv);
+			ValidationResult vr= DataTool.validation(Bean.class, viewv);
+			Bean o=(Bean) DataTool.getEntity(Bean.class, viewv,vr);
 			Log.d("dddd", o.toString());
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
