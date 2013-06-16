@@ -1,15 +1,21 @@
 package cn.com.test;
 
+
 import cn.com.lowe.android.R;
+import cn.com.lowe.android.tools.thread.exception.ThreadMehtodException;
 import cn.com.lowe.android.widget.dialog.CustomDialog;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler.Callback;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
-public class TestActivity extends Activity {
+public class TestActivity extends Activity implements Callback{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,4 +81,43 @@ public class TestActivity extends Activity {
 		dialog.setHalfScreen();
 		dialog.show();
 	}
+	/**
+	 * °ëÆÁ¶Ò»»¿ò
+	 * @param view
+	 */
+	public void testBean(View view) {
+		Intent intent=new Intent(this, BeanActivity.class);
+		this.startActivity(intent);
+	}
+	private DemoThread thread;
+	public void testThread(View view){
+		thread=new DemoThread(this);
+		try {
+			thread.execute("saveInfo", new Object[]{new String("dddd"),null});
+			//thread.execute("saveInfo", new Object[]{new String("1111"),null});
+			//thread.interrupt();
+		} catch (ThreadMehtodException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+	}
+
+	@Override
+	public boolean handleMessage(Message msg) {
+		switch (msg.what) {
+		case 1:
+			Toast.makeText(this, ""+msg.obj, Toast.LENGTH_LONG).show();
+			break;
+		default:
+			break;
+		}
+		return false;
+	}
+	
+	
 }

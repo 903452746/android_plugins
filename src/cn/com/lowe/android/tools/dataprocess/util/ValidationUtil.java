@@ -50,8 +50,70 @@ public class ValidationUtil implements IValidation {
 			value = null;
 			return new String[] { sb.toString(), value };
 		}
+		//校验字段类型与数据是否可以转换
+		sb.append(checkFieldType(value, tipName,fieldClass));
+		if (sb.length() > 0) {
+			value = null;
+			return new String[] { sb.toString(), value };
+		}
 		return null;
 
+	}
+
+	/**
+	* @Title: checkFieldType
+	* @Description: 校验字段类型与数据是否可以转换
+	* @param @param value
+	* @param @param tipName
+	* @param @param fieldClass
+	* @param @return
+	* @return String
+	* @throws
+	*/
+	private String checkFieldType(String value, String tipName, Class<?> fieldClass) {
+		if(null==value||"".equals(value)){
+			return "";
+		}else if (fieldClass == String.class) {
+			return "";
+		} else if (fieldClass == Integer.class) {
+			try {
+				Integer.parseInt(value);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+				return tipName+"必须是整数\n";
+			}
+		} else if (fieldClass == Float.class) {
+			try {
+				Float.parseFloat(value);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+				return tipName+"必须是小数\n";
+			}
+		} else if (fieldClass == Double.class) {
+			try {
+				Double.parseDouble(value);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+				return tipName+"必须是小数\n";
+			}
+		} else if (fieldClass == Short.class) {
+			try {
+				Short.parseShort(value);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+				return tipName+"必须是整数\n";
+			}
+		} else if (fieldClass == Long.class) {
+			try {
+				Long.parseLong(value);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+				return tipName+"必须是整数\n";
+			}
+		} else if (fieldClass == Boolean.class) {
+			return "";
+		}
+		return "";
 	}
 
 	/**
@@ -62,14 +124,14 @@ public class ValidationUtil implements IValidation {
 	 * @param dataExpressionTip
 	 * @return
 	 */
-	private Object checkDataExpression(String value, String tipName, String dataExpression, String dataExpressionTip) {
+	private String checkDataExpression(String value, String tipName, String dataExpression, String dataExpressionTip) {
 		if (TextUtils.isEmpty(dataExpression)) {
-			return null;
+			return "";
 		}
 		if (!value.matches(dataExpression)) {
-			return tipName + "不符合" + (TextUtils.isEmpty(value) ? dataExpression : dataExpressionTip) + "的格式";
+			return tipName  + (TextUtils.isEmpty(value) ? dataExpression : dataExpressionTip) + "的格式\n";
 		}
-		return null;
+		return "";
 	}
 
 	/**
@@ -103,7 +165,7 @@ public class ValidationUtil implements IValidation {
 			break;
 		case NUMBER:
 			try {
-				Integer.getInteger(value);
+				Integer.parseInt(value);
 			} catch (NumberFormatException e) {
 				return tipName + "必须是整数类型\n";
 			}
@@ -112,7 +174,7 @@ public class ValidationUtil implements IValidation {
 		default:
 			break;
 		}
-		return null;
+		return "";
 	}
 
 	/**
@@ -125,7 +187,7 @@ public class ValidationUtil implements IValidation {
 		if (TextUtils.isEmpty(value)) {
 			return tipName + "为必填项\n";
 		}
-		return null;
+		return "";
 
 	}
 
@@ -145,7 +207,7 @@ public class ValidationUtil implements IValidation {
 			note += tipName + "应小于" + maxLength + "个字符\n";
 		}
 		if (minLength != Integer.MIN_VALUE && value.length() < minLength) {
-			note += tipName + "应大于" + maxLength + "个字符\n";
+			note += tipName + "应大于" + minLength + "个字符\n";
 		}
 		return note;
 	}

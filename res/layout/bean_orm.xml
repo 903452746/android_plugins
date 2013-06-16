@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/bean"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/text_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_1" />
+
+        <EditText
+            android:id="@+id/text_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_2" />
+
+        <EditText
+            android:id="@+id/text_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_3" />
+
+        <EditText
+            android:id="@+id/text_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_4" />
+
+        <EditText
+            android:id="@+id/text_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_5" />
+
+        <EditText
+            android:id="@+id/text_6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_6" />
+
+        <EditText
+            android:id="@+id/text_7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_7" />
+
+        <EditText
+            android:id="@+id/text_8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_8" />
+
+        <EditText
+            android:id="@+id/text_9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_9" />
+
+        <EditText
+            android:id="@+id/text_10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_10" />
+
+        <EditText
+            android:id="@+id/text_11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_11" />
+
+        <EditText
+            android:id="@+id/text_12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_12" />
+
+        <EditText
+            android:id="@+id/text_13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_13" />
+
+        <EditText
+            android:id="@+id/text_14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_14" />
+
+        <EditText
+            android:id="@+id/text_15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_15" />
+
+        <EditText
+            android:id="@+id/text_16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_16" />
+
+        <EditText
+            android:id="@+id/text_17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_17" />
+
+        <EditText
+            android:id="@+id/text_18"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="text_18" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="validation"
+            android:text="校验" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="construct"
+            android:text="构造实体" />
+    </LinearLayout>
+
+</ScrollView>

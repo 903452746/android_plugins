@@ -102,5 +102,15 @@ public @interface FieldProperty {
 	 * @return
 	 */
 	public Class<? extends IValue> valueConstructClass() default ValueUtil.class;
+	
+	
+	/**
+	* @Title: arrySplitFlag
+	* @Description: 数组字符拆分标示
+	* @param @return
+	* @return String
+	* @throws
+	*/
+	public String arrySplitFlag() default ",";
 
 }

@@ -1,9 +1,9 @@
 package cn.com.lowe.android.tools.dataprocess;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import cn.com.lowe.android.tools.dataprocess.annotation.FieldProperty;
 import cn.com.lowe.android.tools.dataprocess.annotation.TipProperty;
@@ -23,11 +23,15 @@ import android.view.View;
  */
 public class DataTool {
 	private static final String TAG = "DataTool";
-	private static ValueUtil valueUtil = new ValueUtil();
-	private static ValidationUtil validationUtil = new ValidationUtil();
-
+	// 校验取值对象缓存
+	private static Map<Class<?>, IValue> valueInterfaceMap = new HashMap<Class<?>, IValue>();
+	private static Map<Class<?>, IValidation> validationInterfaceMap = new HashMap<Class<?>, IValidation>();
+	static {
+		valueInterfaceMap.put(ValueUtil.class, new ValueUtil());
+		validationInterfaceMap.put(ValidationUtil.class, new ValidationUtil());
+	}
 	// 实体数据缓存，方便映射成对象时，不必重新取值，提高性能
-	private static Map<String, WeakReference<Map<String, String>>> cacheData = new HashMap<String, WeakReference<Map<String, String>>>();
+	private static WeakHashMap<View, Map<String, String>> cacheData = new WeakHashMap<View, Map<String, String>>();
 
 	public static ValidationResult validation(Class<?> entityClazz, View validView) {
 		Resources res = validView.getResources();
@@ -39,14 +43,14 @@ public class DataTool {
 		Class<?> fieldClass;
 		View fieldView;
 		StringBuffer errorBuf = new StringBuffer();
-		WeakReference<Map<String, String>> weakEntity = cacheData.get(entityClazz.getName());
-		if (weakEntity == null || weakEntity.get() == null) {
-			cacheData.put(entityClazz.getName(), new WeakReference<Map<String, String>>(new HashMap<String, String>()));
+		if (cacheData.get(validView.hashCode()) == null) {
+			Log.d(TAG, entityClazz.getName() + "未发现缓存数据,重新构造");
+			cacheData.put(validView, new HashMap<String, String>());
 		}
-		Map<String, String> entity = cacheData.get(entityClazz.getName()).get();
+		Map<String, String> entity = cacheData.get(validView);
 		for (Field field : fields) {
 			fieldName = field.getName();
-			fieldClass = field.getClass();
+			fieldClass = field.getType();
 			if (field.isAnnotationPresent(FieldProperty.class)) {
 				fieldAnno = field.getAnnotation(FieldProperty.class);
 				if (fieldAnno.mapToViewId() == 0) {
@@ -61,13 +65,13 @@ public class DataTool {
 				tipAnno = field.getAnnotation(TipProperty.class);
 				tipName = AnnotationUtil.parseTipProperty(tipAnno, res, fieldName);
 
-				IValidation iValidation;
+				IValidation iValidation = validationInterfaceMap.get(fieldAnno.validationClass());
+
 				// 避免重复创建默认校验对象
-				if (fieldAnno.validationClass().getName().equals(validationUtil.getClass().getName())) {
-					iValidation = validationUtil;
-				} else {
+				if (iValidation == null) {
 					try {
 						iValidation = (IValidation) fieldAnno.validationClass().newInstance();
+						validationInterfaceMap.put(fieldAnno.validationClass(), iValidation);
 					} catch (InstantiationException e) {
 						Log.e(TAG, fieldName + ":根据FieldProperty.validationClass属性，无参构造函数不存在");
 						continue;
@@ -75,14 +79,14 @@ public class DataTool {
 						Log.e(TAG, fieldName + ":根据FieldProperty.validationClass属性，类不存在");
 						continue;
 					}
+
 				}
-				IValue iValue;
+				IValue iValue = valueInterfaceMap.get(fieldAnno.valueConstructClass());
 				// 避免重复创建默认取值对象
-				if (fieldAnno.valueConstructClass().getName().equals(valueUtil.getClass().getName())) {
-					iValue = valueUtil;
-				} else {
+				if (iValue == null) {
 					try {
 						iValue = (IValue) fieldAnno.valueConstructClass().newInstance();
+						valueInterfaceMap.put(fieldAnno.valueConstructClass(), iValue);
 					} catch (InstantiationException e) {
 						Log.e(TAG, fieldName + ":根据FieldProperty.valueConstructClass属性，无参构造函数不存在");
 						continue;
@@ -93,8 +97,11 @@ public class DataTool {
 				}
 
 				String[] ss = iValidation.check(fieldName, fieldClass, fieldView, fieldAnno, tipName, iValue);
-				errorBuf.append(ss[0]);
-				entity.put(fieldName, ss[1]);
+				if (ss != null && ss.length == 2) {
+					errorBuf.append(ss[0]);
+					entity.put(fieldName, ss[1]);
+				}
+
 			} else {
 				Log.d(TAG, fieldName + ":未设置FieldProperty注解");
 			}
@@ -116,11 +123,14 @@ public class DataTool {
 		String fieldName;
 		Class<?> fieldClass;
 		View fieldView;
-		Map<String, String> entity = cacheData.get(entityClazz.getName()).get();
+		Map<String, String> entity = cacheData.get(validView);
 		boolean entityIsNull = (entity == null);
-		Object o=null;
+		if (entityIsNull) {
+			Log.d(TAG, entityClazz.getName() + "取值过程中未发现缓存数据");
+		}
+		Object o = null;
 		try {
-			o =entityClazz.newInstance();
+			o = entityClazz.newInstance();
 		} catch (InstantiationException e) {
 			Log.e(TAG, entityClazz.getName() + "无参构造函数不存在");
 			throw e;
@@ -130,7 +140,7 @@ public class DataTool {
 		}
 		for (Field field : fields) {
 			fieldName = field.getName();
-			fieldClass = field.getClass();
+			fieldClass = field.getType();
 			if (field.isAnnotationPresent(FieldProperty.class)) {
 				fieldAnno = field.getAnnotation(FieldProperty.class);
 				if (fieldAnno.mapToViewId() == 0) {
@@ -142,13 +152,12 @@ public class DataTool {
 					Log.e(TAG, fieldName + ":根据FieldProperty.mapToViewId属性，无法找到对应View");
 					continue;
 				}
-				IValue iValue;
+				IValue iValue = valueInterfaceMap.get(fieldAnno.valueConstructClass());
 				// 避免重复创建默认取值对象
-				if (fieldAnno.valueConstructClass().getName().equals(valueUtil.getClass().getName())) {
-					iValue = valueUtil;
-				} else {
+				if (iValue == null) {
 					try {
 						iValue = (IValue) fieldAnno.valueConstructClass().newInstance();
+						valueInterfaceMap.put(fieldAnno.valueConstructClass(), iValue);
 					} catch (InstantiationException e) {
 						Log.e(TAG, fieldName + ":根据FieldProperty.valueConstructClass属性，无参构造函数不存在");
 						continue;
@@ -157,19 +166,20 @@ public class DataTool {
 						continue;
 					}
 				}
-				if (entityIsNull) {
-					Object value = iValue.getValue(fieldView, fieldClass);
-					field.setAccessible(true);
-					field.set(o, value);
-				} else if(entity.get(fieldName)!=null) {
-					Object value = iValue.getValueByStr(entity.get(fieldName), fieldClass);
-					field.setAccessible(true);
-					field.set(o, value);
-				}else{
-					Object value = iValue.getValue(fieldView, fieldClass);
-					field.setAccessible(true);
-					field.set(o, value);
+				Object value = null;
+				try {
+					if (entityIsNull) {
+						value = iValue.getValue(fieldView, fieldClass);
+					} else if (entity.get(fieldName) != null) {
+						value = iValue.getValueByStr(entity.get(fieldName), fieldClass);
+					} else {
+						value = iValue.getValue(fieldView, fieldClass);
+					}
+				} catch (Exception e) {
+					Log.e(TAG, fieldName + "内容不可转换为"+fieldClass+"对象", e);
 				}
+				field.setAccessible(true);
+				field.set(o, value);
 			} else {
 				Log.d(TAG, fieldName + ":未设置FieldProperty注解");
 			}
@@ -180,6 +190,53 @@ public class DataTool {
 	}
 
 	public static void setView(Object entity, Class<?> entityClazz, View validView) {
+		Field[] fields = entityClazz.getDeclaredFields();
+		FieldProperty fieldAnno;
+		String fieldName;
+		View fieldView;
+		for (Field field : fields) {
+			fieldName = field.getName();
+			if (field.isAnnotationPresent(FieldProperty.class)) {
+				fieldAnno = field.getAnnotation(FieldProperty.class);
+				if (fieldAnno.mapToViewId() == 0) {
+					Log.e(TAG, fieldName + ":未设置FieldProperty.mapToViewId属性，无法找到对应View");
+					continue;
+				}
+				fieldView = validView.findViewById(fieldAnno.mapToViewId());
+				if (fieldView == null) {
+					Log.e(TAG, fieldName + ":根据FieldProperty.mapToViewId属性，无法找到对应View");
+					continue;
+				}
+				IValue iValue = valueInterfaceMap.get(fieldAnno.valueConstructClass());
+				// 避免重复创建默认取值对象
+				if (iValue == null) {
+					try {
+						iValue = (IValue) fieldAnno.valueConstructClass().newInstance();
+						valueInterfaceMap.put(fieldAnno.valueConstructClass(), iValue);
+					} catch (InstantiationException e) {
+						Log.e(TAG, fieldName + ":根据FieldProperty.valueConstructClass属性，无参构造函数不存在");
+						continue;
+					} catch (IllegalAccessException e) {
+						Log.e(TAG, fieldName + ":根据FieldProperty.valueConstructClass属性，类不存在");
+						continue;
+					}
+				}
+				Object o = null;
+				field.setAccessible(true);
+				try {
+					o = field.get(entity);
+				} catch (IllegalArgumentException e) {
+					Log.e(TAG, fieldName + "属性不存在");
+					continue;
+				} catch (IllegalAccessException e) {
+					Log.e(TAG, fieldName + "属性不可见");
+					continue;
+				}
+				iValue.setValue(o, fieldView, fieldAnno.arrySplitFlag());
+			} else {
+				Log.d(TAG, fieldName + ":未设置FieldProperty注解");
+			}
 
+		}
 	}
 }

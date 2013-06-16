@@ -12,33 +12,45 @@ public interface IValue {
 
 	/**
 	 * 字段取值
-	 * @param view  字段对应View
-	 * @param clazz 字段类型
+	 * 
+	 * @param view
+	 *            字段对应View
+	 * @param clazz
+	 *            字段类型
+	 * @param splitFlag
 	 * @return
 	 */
-	public Object getValue(View view, Class<?> clazz);
+	public Object getValue(View view, Class<?> clazz) throws Exception;
 
 	/**
 	 * 字段取字段串
-	 * @param view  
-	 * @return 
+	 * 
+	 * @param view
+	 * @return
 	 */
 	public String getValueStr(View view);
 
 	/**
 	 * 字段赋值
-	 * @param value 字段值
-	 * @param view 字段对应View
+	 * 
+	 * @param value
+	 *            字段值
+	 * @param view
+	 *            字段对应View
 	 * @return
 	 */
-	public boolean setValue(Object value, View view);
+	public boolean setValue(Object value, View view, String splitFlag);
 
 	/**
 	 * 字符值转字段值
-	 * @param value 字段值
-	 * @param clazz 字段类型
+	 * 
+	 * @param value
+	 *            字段值
+	 * @param clazz
+	 *            字段类型
+	 * @param splitFlag
 	 * @return
 	 */
-	public Object getValueByStr(String value, Class<?> clazz);
+	public Object getValueByStr(String value, Class<?> clazz) throws Exception;
 
 }

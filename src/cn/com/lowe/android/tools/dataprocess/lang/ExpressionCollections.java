@@ -2,7 +2,7 @@ package cn.com.lowe.android.tools.dataprocess.lang;
 
 public class ExpressionCollections {
 
-	public static final String PHONE="";
+	public static final String PHONE="/^\\d{4}[-]{1}\\d{8}$/";
 	public static final String PHONE_TIP="";
 	public static final String MOBILE="";
 	public static final String MOBILE_TIP="";

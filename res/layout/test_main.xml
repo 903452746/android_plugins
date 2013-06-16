@@ -7,27 +7,40 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="自定义对话框" 
-        android:onClick="showCustomDialog"/>
+        android:onClick="showCustomDialog"
+        android:text="自定义对话框" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="全屏对话框" 
-        android:onClick="showCustomFullDialog"/>
+        android:onClick="showCustomFullDialog"
+        android:text="全屏对话框" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showCustomHalfDialog"
+        android:text="半屏对话框" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showCustom2Dialog"
+        android:text="xxxxxxx对话框" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showCustomListenerDialog"
+        android:text="用监听创建对话框" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="testBean"
+        android:text="测试ORM" />
         <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="半屏对话框" 
-        android:onClick="showCustomHalfDialog"/>
-                <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="xxxxxxx对话框" 
-        android:onClick="showCustom2Dialog"/>
-                                <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="用监听创建对话框" 
-        android:onClick="showCustomListenerDialog"/>
-                
+        android:onClick="testThread"
+        android:text="测试线程" />
 </LinearLayout>
