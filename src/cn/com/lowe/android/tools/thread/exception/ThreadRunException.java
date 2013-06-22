@@ -1,13 +1,13 @@
 package cn.com.lowe.android.tools.thread.exception;
 
 /**
-* @Description: 线程调用方法查找不到异常
+* @Description: 线程运行时异常
 *
 * @Author zhengjin 
-* @Date 2013-6-22 下午9:32:24
+* @Date 2013-6-22 下午9:32:52
 * @Version 1.0
 */
-public class ThreadMehtodException extends RuntimeException{
+public class ThreadRunException extends RuntimeException{
 
 	/**  
 	* @Fields serialVersionUID : TODO
@@ -15,11 +15,11 @@ public class ThreadMehtodException extends RuntimeException{
 	
 	private static final long serialVersionUID = 1L;
 
-	public ThreadMehtodException(String msg, Throwable e) {
+	public ThreadRunException(String msg, Throwable e) {
 		super(msg, e);
 	}
 
-	public ThreadMehtodException(String msg) {
+	public ThreadRunException(String msg) {
 		super(msg);
 	}
 

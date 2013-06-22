@@ -3,7 +3,6 @@ package cn.com.lowe.android.tools.dataprocess;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 import cn.com.lowe.android.tools.dataprocess.annotation.FieldProperty;
 import cn.com.lowe.android.tools.dataprocess.annotation.TipProperty;

@@ -3,16 +3,18 @@ package cn.com.lowe.android.tools.thread;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 /**
- * @Description ÏûÏ¢¾ä±ú´úÀí·â×°,ÎªÁË´¦Àíµ÷ÓÃºóÌ¨Ïß³ÌµÄuiÍ£Ö¹ºó,Î´Ö´ĞĞÖĞ¶Ï¼à²â,»á¼ÌĞøÏòÆäËûÏÖ´æui·¢ËÍ½çÃæ²Ù×÷Ö¸Áî¶ø¿ÉÄÜµ¼ÖÂµÄ²»¿É²¶»ñÒì³£<p>
+ * @Description æ¶ˆæ¯å¥æŸ„ä»£ç†å°è£…,ä¸ºäº†å¤„ç†è°ƒç”¨åå°çº¿ç¨‹çš„uiåœæ­¢å,æœªæ‰§è¡Œä¸­æ–­ç›‘æµ‹,ä¼šç»§ç»­å‘å…¶ä»–ç°å­˜uiå‘é€ç•Œé¢æ“ä½œæŒ‡ä»¤è€Œå¯èƒ½å¯¼è‡´çš„ä¸å¯æ•è·å¼‚å¸¸<p>
  *  
  * 
  * @Author zhengjin
- * @Date 2013-6-9 ÏÂÎç11:13:38
+ * @Date 2013-6-9 ä¸‹åˆ11:13:38
  * @Version 1.0
  */
 public class HandlerProxy implements IHandler {
+	private static final String TAG = "HandlerProxy";
 	private Handler handler;
 	private InterruptThread interruptThread;
 
@@ -54,18 +56,18 @@ public class HandlerProxy implements IHandler {
 	}
 
 	/*
-	 * ===============ÕâĞ©·½·¨¿ÉÄÜ»á³öÏÖÎªÁË´¦Àíµ÷ÓÃºóÌ¨Ïß³ÌµÄuiÍ£Ö¹ºó,»á¼ÌĞøÏòÆäËûÏÖ´æui·¢ËÍ½çÃæ²Ù×÷Ö¸Áî¶ø¿ÉÄÜµ¼ÖÂµÄ²»¿É²¶»ñÒì³£´íÎó==
-	 * =========
+	 * ===============è¿™äº›æ–¹æ³•å¯èƒ½ä¼šå‡ºç°ä¸ºäº†å¤„ç†è°ƒç”¨åå°çº¿ç¨‹çš„uiåœæ­¢å,ä¼šç»§ç»­å‘å…¶ä»–ç°å­˜uiå‘é€ç•Œé¢æ“ä½œæŒ‡ä»¤è€Œå¯èƒ½å¯¼è‡´çš„ä¸å¯æ•è·å¼‚å¸¸é”™è¯¯==
+	 * 
 	 */
 	@Override
 	public boolean post(Runnable r) {
 		System.out.println(interruptThread.stoped);
 		if (interruptThread.stoped){
-			System.out.println("ÖĞ¶ÏÁË°É£¿£¿£¿");
+			Log.d(TAG, "è¢«ä¸­æ–­äº†,æ‰§è¡Œä¸äº†äº†%>_<%");
 			return false;	
 		}
 			
-		System.out.println("¼ÌĞøÖ´ĞĞÂğ£¿£¿£¿");
+		Log.d(TAG, "è¿™ä¸ªå‘½ä»¤å¯ä»¥æ‰§è¡Œ:-D");
 		return handler.post(r);
 	}
 
@@ -98,16 +100,16 @@ public class HandlerProxy implements IHandler {
 	}
 
 	/*
-	 * ===============ÕâĞ©·½·¨¿ÉÄÜ»á³öÏÖÎªÁË´¦Àíµ÷ÓÃºóÌ¨Ïß³ÌµÄuiÍ£Ö¹ºó,»á¼ÌĞøÏòÆäËûÏÖ´æui·¢ËÍ½çÃæ²Ù×÷Ö¸Áî¶ø¿ÉÄÜµ¼ÖÂµÄ²»¿É²¶»ñÒì³£´íÎó==
-	 * =========
+	 * ===============è¿™äº›æ–¹æ³•å¯èƒ½ä¼šå‡ºç°ä¸ºäº†å¤„ç†è°ƒç”¨åå°çº¿ç¨‹çš„uiåœæ­¢å,ä¼šç»§ç»­å‘å…¶ä»–ç°å­˜uiå‘é€ç•Œé¢æ“ä½œæŒ‡ä»¤è€Œå¯èƒ½å¯¼è‡´çš„ä¸å¯æ•è·å¼‚å¸¸é”™è¯¯==
+	 * 
 	 */
 	/**
-	 * (·Ç Javadoc)
+	 * (é Javadoc)
 	 * <p>
 	 * Title: removeCallbacks
 	 * </p>
 	 * <p>
-	 * Description:´úÀíÎ´×öÊµÏÖ
+	 * Description:ä»£ç†æœªåšå®ç°
 	 * </p>
 	 * 
 	 * @param r
@@ -120,12 +122,12 @@ public class HandlerProxy implements IHandler {
 	}
 
 	/**
-	 * (·Ç Javadoc)
+	 * (é Javadoc)
 	 * <p>
 	 * Title: removeCallbacks
 	 * </p>
 	 * <p>
-	 * Description:´úÀíÎ´×öÊµÏÖ
+	 * Description:ä»£ç†æœªåšå®ç°
 	 * </p>
 	 * 
 	 * @param r
@@ -175,12 +177,12 @@ public class HandlerProxy implements IHandler {
 	}
 
 	/**
-	 * (·Ç Javadoc)
+	 * (é Javadoc)
 	 * <p>
 	 * Title: removeMessages
 	 * </p>
 	 * <p>
-	 * Description:´úÀíÎ´×öÊµÏÖ
+	 * Description:ä»£ç†æœªåšå®ç°
 	 * </p>
 	 * 
 	 * @param what
@@ -193,12 +195,12 @@ public class HandlerProxy implements IHandler {
 	}
 
 	/**
-	 * (·Ç Javadoc)
+	 * (é Javadoc)
 	 * <p>
 	 * Title: removeMessages
 	 * </p>
 	 * <p>
-	 * Description: ´úÀíÎ´×öÊµÏÖ
+	 * Description: ä»£ç†æœªåšå®ç°
 	 * </p>
 	 * 
 	 * @param what
@@ -213,12 +215,12 @@ public class HandlerProxy implements IHandler {
 	}
 
 	/**
-	 * (·Ç Javadoc)
+	 * (é Javadoc)
 	 * <p>
 	 * Title: removeCallbacksAndMessages
 	 * </p>
 	 * <p>
-	 * Description: ´úÀíÎ´×öÊµÏÖ
+	 * Description: ä»£ç†æœªåšå®ç°
 	 * </p>
 	 * 
 	 * @param token
@@ -231,12 +233,12 @@ public class HandlerProxy implements IHandler {
 	}
 
 	/**
-	 * (·Ç Javadoc)
+	 * (é Javadoc)
 	 * <p>
 	 * Title: hasMessages
 	 * </p>
 	 * <p>
-	 * Description:´úÀíÎ´×öÊµÏÖ
+	 * Description:ä»£ç†æœªåšå®ç°
 	 * </p>
 	 * 
 	 * @param what
@@ -250,12 +252,12 @@ public class HandlerProxy implements IHandler {
 	}
 
 	/**
-	 * (·Ç Javadoc)
+	 * (é Javadoc)
 	 * <p>
 	 * Title: hasMessages
 	 * </p>
 	 * <p>
-	 * Description: ´úÀíÎ´×öÊµÏÖ
+	 * Description: ä»£ç†æœªåšå®ç°
 	 * </p>
 	 * 
 	 * @param what
@@ -271,12 +273,12 @@ public class HandlerProxy implements IHandler {
 	}
 
 	/**
-	 * (·Ç Javadoc)
+	 * (é Javadoc)
 	 * <p>
 	 * Title: getLooper
 	 * </p>
 	 * <p>
-	 * Description:´úÀíÎ´×öÊµÏÖ
+	 * Description:ä»£ç†æœªåšå®ç°
 	 * </p>
 	 * 
 	 * @return

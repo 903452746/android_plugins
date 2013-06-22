@@ -1,10 +1,9 @@
 package cn.com.lowe.android.tools.thread;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 import cn.com.lowe.android.tools.thread.exception.ThreadMehtodException;
+import cn.com.lowe.android.tools.thread.exception.ThreadRunException;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -24,14 +23,36 @@ import android.util.Log;
 public abstract class InterruptThread extends Thread {
 	public static final String TAG = "InterruptThread";
 	private static final String DEFULT_THREAD_TIP = "正在处理中,请稍后...";
-	private static Map<String, Method> threadMethod = new HashMap<String, Method>();
-	
+
 	protected Class<?> childClass;
 	private Method executeMethod;
 	private Object[] params;
 	private String tip = DEFULT_THREAD_TIP;
+	/**
+	 * @Fields process :进度栏
+	 */
 	private ProgressDialog process;
+	/**
+	 * @Fields innerHandler : 内部handler，不使用handler代理
+	 */
 	private Handler innerHandler;
+	/**
+	 * @Fields processDialogShowFinished : 进度栏UI显示完成
+	 */
+	private volatile boolean processDialogShowFinished = false;
+	/**
+	 * @Fields processDialogShowStarted : 进度栏UI显示开始
+	 */
+	private volatile boolean processDialogShowStarted = false;
+	/**
+	 * @Fields enableProcessDialog : 是否启用进度栏
+	 */
+	private volatile boolean enableProcessDialog = true;
+
+	/**
+	 * @Fields cancleProcessDialog : 是否可以取消进度啦
+	 */
+	private volatile boolean cancleProcessDialog = true;
 	/**
 	 * 通过该对象操作UI界面变化
 	 * <p>
@@ -66,7 +87,7 @@ public abstract class InterruptThread extends Thread {
 		this.context = context;
 		this.childClass = this.getClass();
 		uiHandler = new HandlerProxy(Looper.getMainLooper(), this);
-		innerHandler=new Handler(Looper.getMainLooper());
+		innerHandler = new Handler(Looper.getMainLooper());
 	}
 
 	@Override
@@ -80,38 +101,55 @@ public abstract class InterruptThread extends Thread {
 			executeMethod.invoke(this, params);
 
 		} catch (Exception e) {
-			Log.e(TAG, "后台线程函数执行失败", e);
+			throw new ThreadRunException("后台线程函数执行失败", e);
 		} finally {
 			dismissProcessDialog();
 		}
+
 	}
 
 	/**
 	 * @Title: execute
 	 * @Description: 线程调度执行函数
-	 * @param @param executeMethodName
-	 * @param @param params
-	 * @param @throws ThreadMehtodException
+	 * @param executeMethodName
+	 * @param params
 	 * @return void
-	 * @throws
 	 */
-	public final void execute(String executeMethodName, Object... params) throws ThreadMehtodException {
-		executeMethod = threadMethod.get(executeMethodName);
-		if (executeMethod == null) {
-			Method[] methods = childClass.getMethods();
-			for (Method o : methods) {
-				if (o.getName().equals(executeMethodName)) {
-					executeMethod = o;
-					threadMethod.put(executeMethodName, o);
+	public final void execute(String executeMethodName, Object... params) {
+		Class<?>[] paramTypes = new Class<?>[params.length];
+		for (int i = 0, length = paramTypes.length; i < length; i++) {
+			paramTypes[i] = params[i].getClass();
+		}
+		try {
+			executeMethod = childClass.getMethod(executeMethodName, paramTypes);
+		} catch (NoSuchMethodException e) {
+			throw new ThreadMehtodException("后台线程执行函数[" + executeMethodName + "]不存在");
+		}
+		this.params = params;
+		this.start();
+	}
+
+	/**
+	 * @Title: execute
+	 * @Description: 线程调度执行函数
+	 * @param invokeId
+	 * @param params
+	 * @return void
+	 */
+	public final void execute(int invokeId, Object... params) {
+		Method[] methods = childClass.getMethods();
+		InvokeId anno;
+		for (Method method : methods) {
+			if (method.isAnnotationPresent(InvokeId.class)) {
+				anno = method.getAnnotation(InvokeId.class);
+				if (anno.value() == invokeId) {
+					executeMethod = method;
 					break;
 				}
 			}
-			if (executeMethod == null) {
-				throw new ThreadMehtodException("后台线程执行函数[" + executeMethodName + "]不存在");
-			}
-			if (!executeMethod.getReturnType().getName().equalsIgnoreCase("void")) {
-				throw new ThreadMehtodException("后台线程执行函数[" + executeMethodName + "]返回参数必须为空");
-			}
+		}
+		if (executeMethod == null) {
+			throw new ThreadMehtodException("后台线程执行函数[invokeid:" + invokeId + "]不存在");
 		}
 		this.params = params;
 		this.start();
@@ -138,12 +176,15 @@ public abstract class InterruptThread extends Thread {
 	/**
 	 * @Title: updateDialog
 	 * @Description: 更新对话框指令
-	 * @param @param msg
-	 * @param @param cancelable
+	 * @param msg
+	 * @param cancelable
 	 * @return void
-	 * @throws
 	 */
 	public void updateDialog(final String msg, boolean cancelable) {
+		if (!enableProcessDialog) {
+			return;
+		}
+
 		setDialogCancelable(cancelable);
 		updateDialogMsg(msg);
 	}
@@ -151,66 +192,123 @@ public abstract class InterruptThread extends Thread {
 	/**
 	 * @Title: setDialogCancelable
 	 * @Description: 设置对话框不可取消
-	 * @param @param cancelable
+	 * @param cancelable
 	 * @return void
-	 * @throws
 	 */
 	public void setDialogCancelable(boolean cancelable) {
-		process.setCancelable(cancelable);
+		if (!enableProcessDialog) {
+			return;
+		}
+		if (processDialogShowStarted) {
+
+			while (!processDialogShowFinished) {
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			process.setCancelable(cancelable);
+		}
+
+	}
+
+	/**
+	 * @Title: enableProcessDialog
+	 * @Description: 启动线程后，是否显示进度框
+	 * @param enable
+	 * @return void
+	 */
+	public void enableProcessDialog(boolean enable) {
+		enableProcessDialog = enable;
+	}
+
+	/**
+	 * @Title: cancleProcessDialog
+	 * @Description: 启动线程后，进度对话框是否可取消
+	 * @param cancle
+	 * @return void
+	 */
+	public void cancleProcessDialog(boolean cancle) {
+		cancleProcessDialog = cancle;
 	}
 
 	/**
 	 * @Title: updateDialogMsg
 	 * @Description: 更新对话框内容
-	 * @param @param msg
+	 * @param msg
 	 * @return void
-	 * @throws
 	 */
 	public void updateDialogMsg(final String msg) {
-		innerHandler.post(new Runnable() {
+		if (!enableProcessDialog) {
+			return;
+		}
+		if (processDialogShowStarted) {
 
-			@Override
-			public void run() {
-				process.setMessage(msg);
+			while (!processDialogShowFinished) {
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
-		});
-
-	}
-
-	/**
-	 * @Title: dismissProcessDialog
-	 * @Description: 取消对话框
-	 * @param
-	 * @return void
-	 * @throws
-	 */
-	public void dismissProcessDialog() {
-		if (process != null && process.isShowing()) {
+			Log.d(TAG, "更新进度框");
 			innerHandler.post(new Runnable() {
 
 				@Override
 				public void run() {
-					process.dismiss();
+					process.setMessage(msg);
 				}
 			});
 		}
 	}
 
 	/**
+	 * @Title: dismissProcessDialog
+	 * @Description: 取消对话框
+	 * @return void
+	 */
+	public void dismissProcessDialog() {
+		if (!enableProcessDialog) {
+			return;
+		}
+		if (processDialogShowStarted) {
+
+			while (!processDialogShowFinished) {
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			Log.d(TAG, "去除进度框");
+			if (process != null) {
+				process.dismiss();
+			}
+		}
+
+	}
+
+	/**
 	 * @Title: showProcessDialog
 	 * @Description: 展示对话框
-	 * @param
 	 * @return void
-	 * @throws
 	 */
 	public void showProcessDialog() {
+		if (!enableProcessDialog) {
+			return;
+		}
+		processDialogShowStarted = true;
 		innerHandler.post(new Runnable() {
 
 			@Override
 			public void run() {
 				process = ProgressDialog.show(context, null, tip);
-				process.setCancelable(true);
+				process.setCancelable(cancleProcessDialog);
 				process.setOnDismissListener(dismissListener);
+				processDialogShowFinished = true;
+				Log.d(TAG, "显示进度框");
+
 			}
 		});
 	}

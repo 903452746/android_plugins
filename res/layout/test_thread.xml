@@ -7,50 +7,49 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="showCustomDialog"
-        android:text="自定义对话框" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="showCustomFullDialog"
-        android:text="全屏对话框" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="showCustomHalfDialog"
-        android:text="半屏对话框" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="showCustom2Dialog"
-        android:text="xxxxxxx对话框" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="showCustomListenerDialog"
-        android:text="用监听创建对话框" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="testBean"
-        android:text="测试ORM" />
-        <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:onClick="testThread"
-        android:text="测试线程" />
-          <Button
+        android:text="线程测试" />
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="testInjectActivity"
-        android:text="测试Activity注入" />
-                  <Button
+        android:onClick="testNoProgressThread"
+        android:text="无进度框线程测试" />
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="testThread"
-        android:text="测试线程" />
+        android:onClick="testChangeProgressThread"
+        android:text="修改进度栏内容线程测试" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="testUnCancleThread"
+        android:text="不可取消进度栏内容线程测试" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="testAnnoSuccThread"
+        android:text="注解方式调用线程成功测试" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="testAnnoFailThread"
+        android:text="注解方式调用线程失败测试" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="testMethodNameSuccThread"
+        android:text="方法名方式调用线程成功测试" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="testMethodNameFailThread"
+        android:text="方法名方式调用线程失败测试" />
+
 </LinearLayout>
