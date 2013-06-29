@@ -3,6 +3,7 @@ package cn.com.test;
 import java.lang.reflect.Field;
 
 import cn.com.lowe.android.R;
+import cn.com.lowe.android.tools.dataprocess.BeanActivity;
 import cn.com.lowe.android.tools.thead.ThreadTestActivity;
 import cn.com.lowe.android.view.ViewTestActivity;
 import cn.com.lowe.android.widget.camera.CameraActivity;

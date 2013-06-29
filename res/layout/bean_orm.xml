@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/cn.com.lowe.android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -13,110 +14,112 @@
             android:id="@+id/text_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_1"
-            android:inputType="textAutoComplete" />
+            android:hint="字符数据格式" />
 
         <EditText
             android:id="@+id/text_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_2" />
+            android:hint="整型数据格式" />
 
         <EditText
             android:id="@+id/text_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_3" />
+            android:hint="短整型数据格式" />
 
         <EditText
             android:id="@+id/text_4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_4" />
+            android:hint="长整型数据格式" />
 
         <EditText
             android:id="@+id/text_5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_5" />
+            android:hint="浮点数据格式" />
 
         <EditText
             android:id="@+id/text_6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_6" />
+            android:hint="double数据格式" />
 
         <EditText
             android:id="@+id/text_7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_7" />
+            android:hint="boolean数据格式" />
 
         <EditText
             android:id="@+id/text_8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_8" />
+            android:hint="必读" />
 
         <EditText
             android:id="@+id/text_9"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_9" />
+            android:hint="非必读" />
 
         <EditText
             android:id="@+id/text_10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_10" />
+            android:hint="最大长度为4" />
 
         <EditText
             android:id="@+id/text_11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_11" />
+            android:hint="最大长度为2" />
 
         <EditText
             android:id="@+id/text_12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_12" />
+            android:hint="文本格式" />
 
-        <EditText
+        <cn.com.lowe.android.view.DateEditText
             android:id="@+id/text_13"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_13" />
+            android:hint="日期格式"
+            app:dateType="date" />
 
-        <EditText
+        <cn.com.lowe.android.view.DateEditText
             android:id="@+id/text_14"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_14" />
+            android:hint="日期时间格式"
+            app:dateType="datetime" />
 
         <EditText
             android:id="@+id/text_15"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_15" />
+            android:hint="浮点数" />
 
         <EditText
             android:id="@+id/text_16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_16" />
+            android:hint="整数" />
 
-        <EditText
+        <cn.com.lowe.android.view.DateEditText
             android:id="@+id/text_17"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_17" />
+            android:hint="时间"
+            app:dateType="time" />
 
         <EditText
             android:id="@+id/text_18"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_18" />
+            android:hint="输入格式表达式校验" />
 
         <Button
             android:layout_width="match_parent"
@@ -127,8 +130,13 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="construct"
+            android:onClick="getEntity"
             android:text="构造实体" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="setEntity"
+            android:text="赋值实体" />
     </LinearLayout>
 
 </ScrollView>

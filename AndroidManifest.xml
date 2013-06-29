@@ -9,7 +9,8 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <uses-feature android:name="android.hardware.camera" />
 
     <application
@@ -25,7 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="cn.com.test.BeanActivity" />
+        <activity android:name="cn.com.lowe.android.tools.dataprocess.BeanActivity" />
         <activity android:name="cn.com.test.TestInjectActivity" />
         <activity android:name="cn.com.lowe.android.tools.thead.ThreadTestActivity" />
         <activity android:name="cn.com.lowe.android.view.ViewTestActivity" />

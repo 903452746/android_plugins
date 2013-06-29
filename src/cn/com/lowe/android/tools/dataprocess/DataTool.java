@@ -12,7 +12,6 @@ import cn.com.lowe.android.tools.dataprocess.util.ErrorTipUtil;
 import cn.com.lowe.android.tools.dataprocess.util.ValidationUtil;
 import cn.com.lowe.android.tools.dataprocess.util.ValueUtil;
 import android.content.res.Resources;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -97,7 +96,7 @@ public class DataTool {
 				if (ss != null && ss.length == 2) {
 					errorBuf.append(ss[0]);
 					entity.put(fieldName, ss[1]);
-					if (setError && !TextUtils.isEmpty(ss[0])) {
+					if (setError) {
 						ErrorTipUtil.setError(fieldView, ss[0]);
 					}
 				}
