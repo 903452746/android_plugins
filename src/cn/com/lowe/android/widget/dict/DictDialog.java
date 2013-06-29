@@ -97,7 +97,7 @@ public class DictDialog extends CustomDialog implements View.OnClickListener {
 	public void onClick(View v) {
 		if(v.getId()==R.id.btn1){
 			this.dismiss();
-		}else if(v.getId()==R.id.btn1){
+		}else if(v.getId()==R.id.btn2){
 			listviewAdapter.getSelectDataList().clear();
 			this.dismiss();
 		}
