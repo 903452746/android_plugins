@@ -5,8 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import cn.com.lowe.android.R;
-import cn.com.lowe.android.widget.date.DateTimePickerDialog.OnDateTimeSetListener;
-import cn.com.lowe.android.widget.date.TimePickerDialog.OnTimeSetListener;
+import cn.com.lowe.android.widget.date.DatePickerDialog;
+import cn.com.lowe.android.widget.date.DateTimePickerDialog;
+import cn.com.lowe.android.widget.date.TimePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -104,7 +105,7 @@ public class DateEditText extends EditText implements View.OnTouchListener {
 				theme=R.style.date_dialog_theme_api_10;
 			}
 			if (dateType == DATETYPE_DATE) {
-				Dialog dialog = new cn.com.lowe.android.widget.date.DatePickerDialog(v.getContext(),theme, new cn.com.lowe.android.widget.date.DatePickerDialog.OnDateSetListener() {
+				Dialog dialog = new DatePickerDialog(v.getContext(),theme, new DatePickerDialog.OnDateSetListener() {
 
 					@Override
 					public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -123,7 +124,7 @@ public class DateEditText extends EditText implements View.OnTouchListener {
 
 				dialog.show();
 			} else if (dateType == DATETYPE_TIME) {
-				Dialog dialog = new cn.com.lowe.android.widget.date.TimePickerDialog(v.getContext(),theme, new OnTimeSetListener() {
+				Dialog dialog = new TimePickerDialog(v.getContext(),theme, new TimePickerDialog.OnTimeSetListener() {
 
 					@Override
 					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -142,7 +143,7 @@ public class DateEditText extends EditText implements View.OnTouchListener {
 				}, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
 				dialog.show();
 			} else if (dateType == DATETYPE_DATETIME) {
-				Dialog dialog = new cn.com.lowe.android.widget.date.DateTimePickerDialog(v.getContext(), new OnDateTimeSetListener() {
+				Dialog dialog = new DateTimePickerDialog(v.getContext(), new DateTimePickerDialog.OnDateTimeSetListener() {
 
 					@Override
 					public void onDateTimeSet(DatePicker dateView, TimePicker timerView, int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute) {
