@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/cn.com.lowe.android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <cn.com.lowe.android.view.DateEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="日期控件"
+        app:dateType="date" >
+    </cn.com.lowe.android.view.DateEditText>
+
+    <cn.com.lowe.android.view.DateEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="时间控件"
+        app:dateType="time" >
+    </cn.com.lowe.android.view.DateEditText>
+
+    <cn.com.lowe.android.view.DateEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="时间日期控件"
+        app:dateType="datetime" >
+    </cn.com.lowe.android.view.DateEditText>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </EditText>
+
+    <cn.com.lowe.android.view.PhoneView
+        android:layout_width="400dp"
+        android:layout_height="wrap_content" >
+    </cn.com.lowe.android.view.PhoneView>
+
+    <cn.com.lowe.android.view.DictEditText
+        android:id="@+id/dict_signal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="单选"
+        app:multiple="false" >
+    </cn.com.lowe.android.view.DictEditText>
+
+    <cn.com.lowe.android.view.DictEditText
+        android:id="@+id/dict_multiple"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="多选"
+        app:multiple="true"
+        app:maxselect="4"
+        app:itemformate="fmt_111111">
+    </cn.com.lowe.android.view.DictEditText>
+
+</LinearLayout>

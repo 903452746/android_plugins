@@ -11,16 +11,16 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 /**
- * Ä¬ÈÏÈ¡ÖµÆ÷
+ * é»˜è®¤å–å€¼å™¨
  * 
  * @author zhengjin
  * 
  */
 public class ValueUtil implements IValue {
 
-	/** (·Ç Javadoc)
+	/** (é Javadoc)
 	* <p>Title: getValueStr</p>
-	* <p>Description:Ö§³ÖTextView, EditText, Spinner, RadioGroup, RadioButton, CheckBox×é¼şµÄÈ¡Öµ </p>
+	* <p>Description:æ”¯æŒTextView, EditText, Spinner, RadioGroup, RadioButton, CheckBoxç»„ä»¶çš„å–å€¼ </p>
 	* @param view
 	* @return
 	* @see cn.com.lowe.android.tools.dataprocess.IValue#getValueStr(android.view.View)
@@ -56,7 +56,7 @@ public class ValueUtil implements IValue {
 				value = rd.getTag().toString();
 			}
 		}else{
-			Log.e("ValueUtil", "ValueUtil²»Ö§³Ö"+view.getClass().getName()+"¶ÔÏóµÄÈ¡Öµ");
+			Log.e("ValueUtil", "ValueUtilä¸æ”¯æŒ"+view.getClass().getName()+"å¯¹è±¡çš„å–å€¼");
 		}
 		return value;
 	}
@@ -80,7 +80,7 @@ public class ValueUtil implements IValue {
 		} else if (clazz == Boolean.class) {
 			return Boolean.valueOf(value);
 		} else{
-			Log.e("ValueUtil", "ValueUtil²»Ö§³Ö"+clazz.getClass().getName()+"ÀàĞÍµÄ¶ÔÏó×ª»»");
+			Log.e("ValueUtil", "ValueUtilä¸æ”¯æŒ"+clazz.getClass().getName()+"ç±»å‹çš„å¯¹è±¡è½¬æ¢");
 		}
 		return null;
 	}
@@ -96,9 +96,9 @@ public class ValueUtil implements IValue {
 	}
 
 	/**
-	* (·Ç Javadoc)
+	* (é Javadoc)
 	* <p>Title: setValue</p>
-	* <p>Description:Ö§³ÖTextView, EditText, Spinner, RadioGroup, RadioButton, CheckBox×é¼şµÄ¸³Öµ </p>
+	* <p>Description:æ”¯æŒTextView, EditText, Spinner, RadioGroup, RadioButton, CheckBoxç»„ä»¶çš„èµ‹å€¼ </p>
 	* @param value
 	* @param view
 	* @param splitFlag
@@ -151,7 +151,7 @@ public class ValueUtil implements IValue {
 			}
 
 		}else{
-			Log.e("ValueUtil", "ValueUtil²»Ö§³Ö"+view.getClass().getName()+"¶ÔÏóµÄ¸³Öµ");
+			Log.e("ValueUtil", "ValueUtilä¸æ”¯æŒ"+view.getClass().getName()+"å¯¹è±¡çš„èµ‹å€¼");
 		}
 		return true;
 

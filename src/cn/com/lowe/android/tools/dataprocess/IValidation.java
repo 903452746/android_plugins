@@ -4,19 +4,19 @@ import cn.com.lowe.android.tools.dataprocess.annotation.FieldProperty;
 import android.view.View;
 
 /**
- * Ğ£Ñé½Ó¿Ú
+ * æ ¡éªŒæ¥å£
  * @author zhengjin
  *
  */
 public interface IValidation {
 	
 	/**
-	 * @param fieldName ×Ö¶ÎÃû
-	 * @param fieldClass ×Ö¶ÎÀàĞÍ
-	 * @param fieldView ×Ö¶Î¶ÔÓ¦View 
-	 * @param fieldAnno ×Ö¶ÎÊôĞÔ×¢½â
-	 * @param tipName ×Ö¶Î´íÎóÌáÊ¾ÄÚÈİ
-	 * @param iValue ×Ö¶ÎÈ¡Öµ½Ó¿Ú
+	 * @param fieldName å­—æ®µå
+	 * @param fieldClass å­—æ®µç±»å‹
+	 * @param fieldView å­—æ®µå¯¹åº”View 
+	 * @param fieldAnno å­—æ®µå±æ€§æ³¨è§£
+	 * @param tipName å­—æ®µé”™è¯¯æç¤ºå†…å®¹
+	 * @param iValue å­—æ®µå–å€¼æ¥å£
 	 * @return
 	 */
 	public String[] check(String fieldName, Class<?> fieldClass, View fieldView, FieldProperty fieldAnno, String tipName, IValue iValue);

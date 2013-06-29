@@ -1,10 +1,12 @@
 package cn.com.lowe.android.tools.dataprocess.annotation;
 
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 
 import cn.com.lowe.android.tools.dataprocess.IValidation;
 import cn.com.lowe.android.tools.dataprocess.IValue;
@@ -12,8 +14,9 @@ import cn.com.lowe.android.tools.dataprocess.lang.DataType;
 import cn.com.lowe.android.tools.dataprocess.util.ValidationUtil;
 import cn.com.lowe.android.tools.dataprocess.util.ValueUtil;
 
+
 /**
- * ×Ö¶ÎÊôĞÔÉèÖÃ
+ * å­—æ®µå±æ€§è®¾ç½®
  * 
  * @author zhengjin
  * 
@@ -23,15 +26,16 @@ import cn.com.lowe.android.tools.dataprocess.util.ValueUtil;
 @Target(ElementType.FIELD)
 public @interface FieldProperty {
 	/**
-	 * ×Ö¶Î¶ÔÓ¦R.id.xxx,ÓÃÓÚ´ÓViewÖĞÕÒµ½¶ÔÓ¦ÊÓÍ¼
+	 * å­—æ®µå¯¹åº”R.id.xxx,ç”¨äºä»Viewä¸­æ‰¾åˆ°å¯¹åº”è§†å›¾
 	 * 
 	 * @default 0
 	 * @return
 	 */
 	public int mapToViewId() default 0;
 
+
 	/**
-	 * ×Ö¶Î×î´ó³¤¶È
+	 * å­—æ®µæœ€å¤§é•¿åº¦
 	 * 
 	 * @default Integer.MAX_VALUE
 	 * @return
@@ -39,78 +43,90 @@ public @interface FieldProperty {
 	 */
 	public int maxLength() default Integer.MAX_VALUE;
 
+
 	/**
-	 * ×Ö¶Î×îĞ¡³¤¶È
+	 * å­—æ®µæœ€å°é•¿åº¦
 	 * 
 	 * @default Integer.MIN_VALUE
 	 * @return
 	 */
 	public int minLength() default Integer.MIN_VALUE;
 
+
 	/**
-	 * ×Ö¶ÎÊÇ·ñ±ØÌî
+	 * å­—æ®µæ˜¯å¦å¿…å¡«
 	 * 
 	 * @default false
 	 * @return
 	 */
 	public boolean required() default false;
 
+
 	/**
-	 * ×Ö¶ÎÀàĞÍ
+	 * å­—æ®µç±»å‹
 	 * 
 	 * @default DataType.TEXT
 	 * @return
 	 */
 	public DataType dataType() default DataType.TEXT;
 
+
 	/**
-	 * ÈÕÆÚĞÍ×Ö¶ÎµÄ¸ñÊ½
+	 * æ—¥æœŸå‹å­—æ®µçš„æ ¼å¼
 	 * 
 	 * @default "yyyy-MM-dd"
 	 * @return
 	 */
 	public String dateFmt() default "yyyy-MM-dd";
 
+
 	/**
-	 * ×Ö¶ÎÖµĞ£ÑéÕıÔò±í´ïÊ½
+	 * å­—æ®µå€¼æ ¡éªŒæ­£åˆ™è¡¨è¾¾å¼
 	 * 
 	 * @default ""
 	 * @return
 	 */
 	public String dataExpression() default "";
 
+
 	/**
-	 * ×Ö¶ÎÖµĞ£Ñé´íÎóÌáÊ¾
+	 * å­—æ®µå€¼æ ¡éªŒé”™è¯¯æç¤º
 	 * 
 	 * @default ""
 	 * @return
 	 */
 	public String dataExpressionTip() default "";
 
+
 	/**
-	 * ×Ö¶ÎĞ£Ñé¹¤¾ß Ä¬ÈÏÎªValidationUtil.class,¿ÉÒÔÊµÏÖIValidation½Ó¿ÚÀ´×Ô¶¨ÒåĞ£ÑéÆ÷
+	 * å­—æ®µæ ¡éªŒå·¥å…· é»˜è®¤ä¸ºValidationUtil.class,å¯ä»¥å®ç°IValidationæ¥å£æ¥è‡ªå®šä¹‰æ ¡éªŒå™¨
 	 * 
 	 * @default ValidationUtil.class
 	 * @return
 	 */
 	public Class<? extends IValidation> validationClass() default ValidationUtil.class;
 
+
 	/**
-	 * ×Ö¶ÎÈ¡Öµ¹¤¾ß Ä¬ÈÏÎªValueUtil.class,¿ÉÒÔÊµÏÖIValue½Ó¿ÚÀ´×Ô¶¨ÒåÈ¡Öµ¹¹ÔìÆ÷
+	 * å­—æ®µå–å€¼å·¥å…· é»˜è®¤ä¸ºValueUtil.class,å¯ä»¥å®ç°IValueæ¥å£æ¥è‡ªå®šä¹‰å–å€¼æ„é€ å™¨
 	 * 
 	 * @default ValueUtil.class
 	 * @return
 	 */
 	public Class<? extends IValue> valueConstructClass() default ValueUtil.class;
-	
-	
+
+
+
+
 	/**
 	* @Title: arrySplitFlag
-	* @Description: Êı×é×Ö·û²ğ·Ö±êÊ¾
+	* @Description: æ•°ç»„å­—ç¬¦æ‹†åˆ†æ ‡ç¤º
 	* @param @return
 	* @return String
 	* @throws
 	*/
 	public String arrySplitFlag() default ",";
 
+
 }
+

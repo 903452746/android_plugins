@@ -13,7 +13,8 @@
             android:id="@+id/text_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="text_1" />
+            android:hint="text_1"
+            android:inputType="textAutoComplete" />
 
         <EditText
             android:id="@+id/text_2"

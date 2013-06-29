@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,28 +22,29 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class CustomDialog extends Dialog {
-	private static final String TAG = CustomDialog.class.getName();
+	private static final String TAG = "CustomDialog";
 	public static final float WRAP_CONTENT = -2.0f;
 	private int viewResourceId;
 	private DialogCreateListener viewCreateListener;
 	private Context context;
 	private LayoutInflater inflater;
 
-	// ÄÚ²¿Ò³ÃæÔªËØ
+	// å†…éƒ¨é¡µé¢å…ƒç´ 
 	private LinearLayout contentView;
 	private RelativeLayout titleContentView;
 	private ImageView titleIconView;
 	private TextView titleView;
 
-	// Ò³ÃæÅäÖÃÊôĞÔ
+	// é¡µé¢é…ç½®å±æ€§
 	private Config config;
 	private int screenWidth;
 	private int screenHeight;
-	// ÔİÊ±²»ÓÃ
-	@SuppressWarnings("unused")
+	// æš‚æ—¶ä¸ç”¨
 	private int titleHeight;
 	private int dialogWidth;
 	private int dialogHeiht;
+
+	private boolean isCreated = false;
 
 	public CustomDialog(Context context, int viewResourceId) {
 		this(context, viewResourceId, null, 0);
@@ -78,16 +80,28 @@ public class CustomDialog extends Dialog {
 		Log.d(TAG, "CustomDialog.onCreate()");
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		if (savedInstanceState != null) {
-
+		if (config.dialogFrameId != 0) {
+			setContentView(config.dialogFrameId);
+		} else {
+			setContentView(R.layout.android_customdialog);
 		}
-		setContentView(R.layout.lowe_widget_customdialog);
 		contentView = (LinearLayout) findViewById(R.id.widget_customdialog_content);
 		titleIconView = (ImageView) findViewById(R.id.widget_customdialog_title_icon);
 		titleView = (TextView) findViewById(R.id.widget_customdialog_title_text);
 		titleContentView = (RelativeLayout) findViewById(R.id.widget_customdialog_title);
+		if(contentView==null||titleIconView==null||titleView==null||titleContentView==null){
+			throw new RuntimeException("è‡ªå®šä¹‰å¯¹è¯æ¡†é¡¶å±‚å¸ƒå±€æ˜¯è¦åŒ…å«å¦‚ä¸‹å…ƒç´ Id[widget_customdialog_content|widget_customdialog_title_icon|widget_customdialog_title_text|widget_customdialog_title]");
+		}
 		createContentUI();
+		isCreated = true;
+
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
 		initConfig();
+
 	}
 
 	@Override
@@ -105,6 +119,10 @@ public class CustomDialog extends Dialog {
 	}
 
 	private void initConfig() {
+		if (!isCreated) {
+			return;
+		}
+
 		if (config.titleIcon != null) {
 			titleIconView.setImageDrawable(config.titleIcon);
 		}
@@ -125,36 +143,30 @@ public class CustomDialog extends Dialog {
 			contentView.setBackground(config.contentBgImage);
 		}
 
-		// ¶Ô»°¿ò¿í¸ßÉèÖÃ
+		// å¯¹è¯æ¡†å®½é«˜è®¾ç½®
 		DisplayMetrics dm = context.getResources().getDisplayMetrics();
 		screenWidth = dm.widthPixels;
 		screenHeight = dm.heightPixels;
 		titleHeight = titleContentView.getHeight();
 
-		// ¿í¸ß±È¼ÆËã
-		if (config.widthPercent == WRAP_CONTENT) {
-			dialogWidth = (int) WRAP_CONTENT;
-		} else if (config.widthPercent <= 1 && config.widthPercent > 0) {
+		LayoutParams layoutParams = contentView.getLayoutParams();
+		// å®½é«˜æ¯”è®¡ç®—
+		if (config.widthPercent <= 1 && config.widthPercent > 0) {
 			dialogWidth = (int) (screenWidth * config.widthPercent);
-		} else {
-			Log.e(TAG, "¶Ô»°¿ò¿í¶ÈÉèÖµ´íÎó,ÇëÉèÖÃ0µ½1(°üº¬1)Ö®¼äµÄ¸¡µãÊıÖµ»òÕßCustomDialog.WRAP_CONTENT");
-			dialogWidth = (int) WRAP_CONTENT;
+			layoutParams.width = dialogWidth;
 		}
-		if (config.heightPercent == WRAP_CONTENT) {
-			dialogHeiht = (int) WRAP_CONTENT;
-		} else if (config.heightPercent <= 1 && config.heightPercent > 0) {
+		if (config.heightPercent <= 1 && config.heightPercent > 0) {
 			dialogHeiht = (int) (screenHeight * config.heightPercent);
-		} else {
-			Log.e(TAG, "¶Ô»°¿ò¸ß¶ÈÉèÖµ´íÎó,ÇëÉèÖÃ0µ½1(°üº¬1)Ö®¼äµÄ¸¡µãÊıÖµ»òÕßCustomDialog.WRAP_CONTENT");
-			dialogHeiht = (int) WRAP_CONTENT;
+			layoutParams.height = dialogHeiht;
 		}
 
-		// ¸ß¶ÈĞèÒªÌŞ³ı±êÌâ¸ß ¶È
-		// È¡µ½µÄ¸ß¶ÈÒ»Ö±Îª0£¬»¹Ã»ÕÒµ½½â¾ö·½°¸
-		// if (dialogHeiht != WRAP_CONTENT) {
-		// dialogHeiht -= titleHeight;
-		// }
-		contentView.setLayoutParams(new LinearLayout.LayoutParams(dialogWidth, dialogHeiht));
+		// é«˜åº¦éœ€è¦å‰”é™¤æ ‡é¢˜é«˜ åº¦
+		// å–åˆ°çš„é«˜åº¦ä¸€ç›´ä¸º0ï¼Œè¿˜æ²¡æ‰¾åˆ°è§£å†³æ–¹æ¡ˆ
+		if (dialogHeiht != WRAP_CONTENT) {
+			dialogHeiht -= titleHeight;
+		}
+
+		contentView.setLayoutParams(layoutParams);
 	}
 
 	private void createContentUI() {
@@ -167,11 +179,6 @@ public class CustomDialog extends Dialog {
 			viewCreateListener.onCreate(contentView);
 		}
 
-	}
-
-	@Override
-	public Bundle onSaveInstanceState() {
-		return super.onSaveInstanceState();
 	}
 
 	public interface DialogCreateListener {
@@ -188,173 +195,194 @@ public class CustomDialog extends Dialog {
 		public Drawable titleBgImage;
 		public int contentBgColor = Integer.MAX_VALUE;
 		public Drawable contentBgImage;
-		public float heightPercent = WRAP_CONTENT;
-		public float widthPercent = WRAP_CONTENT;
+		public float heightPercent = 100;
+		public float widthPercent = 100;
+		public int dialogFrameId = 0;
 	}
 
-	// ¶Ô»°¿òÅäÖÃ-begin
+	// å¯¹è¯æ¡†é…ç½®-begin
+	public void setDialogFrame(int dialogFrameId) {
+		this.config.dialogFrameId = dialogFrameId;
+	}
 
 	/**
-	 * ÉèÖÃ±êÌâ
+	 * è®¾ç½®æ ‡é¢˜
 	 * 
 	 * @param resourceId
 	 */
 	public void setTitleText(int resourceId) {
 		this.config.titleText = context.getResources().getString(resourceId);
+		initConfig();
 	}
 
 	/**
-	 * ÉèÖÃ±êÌâ
+	 * è®¾ç½®æ ‡é¢˜
 	 * 
 	 * @param titleText
 	 */
 	public void setTitleText(String titleText) {
 		this.config.titleText = titleText;
+		initConfig();
 	}
 
 	/**
-	 * ÉèÖÃ±êÌâÎÄ×ÖÑÕÉ«
+	 * è®¾ç½®æ ‡é¢˜æ–‡å­—é¢œè‰²
 	 * 
 	 * @param colorString
 	 */
 	public void setTitleTextColor(String colorString) {
 		setTitleTextColor(Color.parseColor(colorString));
+		initConfig();
 
 	}
 
 	/**
-	 * ÉèÖÃ±êÌâ ÎÄ×ÖÑÕÉ«
+	 * è®¾ç½®æ ‡é¢˜ æ–‡å­—é¢œè‰²
 	 * 
 	 * @param colorId
 	 */
 	public void setTitleTextColor(int colorId) {
 		this.config.titleTextColor = colorId;
+		initConfig();
 	}
 
 	/**
-	 * ÉèÖÃ±êÌâÍ¼±ê
+	 * è®¾ç½®æ ‡é¢˜å›¾æ ‡
 	 * 
 	 * @param resourceId
 	 */
 	public void setTitleIcon(int resourceId) {
 		config.titleIcon = getContext().getResources().getDrawable(resourceId);
+		initConfig();
 	}
 
 	/**
-	 * ÉèÖÃ±êÌâÍ¼±ê
+	 * è®¾ç½®æ ‡é¢˜å›¾æ ‡
 	 * 
 	 * @param bitmap
 	 */
 	public void setTitleIcon(Bitmap bitmap) {
 		this.config.titleIcon = new BitmapDrawable(getContext().getResources(), bitmap);
+		initConfig();
 	}
 
 	/**
-	 * ÉèÖÃ±êÌâÍ¼±ê
+	 * è®¾ç½®æ ‡é¢˜å›¾æ ‡
 	 * 
 	 * @param drawable
 	 */
 	public void setTitleIcon(Drawable drawable) {
 		this.config.titleIcon = drawable;
+		initConfig();
 	}
 
 	/**
-	 * ÉèÖÃ±êÌâ±³¾°ÑÕÉ«
+	 * è®¾ç½®æ ‡é¢˜èƒŒæ™¯é¢œè‰²
 	 * 
 	 * @param colorString
 	 */
 	public void setTitleBgColor(String colorString) {
 		setTitleBgColor(Color.parseColor(colorString));
+		initConfig();
 
 	}
 
 	/**
-	 * ÉèÖÃ±êÌâ±³¾°ÑÕÉ«
+	 * è®¾ç½®æ ‡é¢˜èƒŒæ™¯é¢œè‰²
 	 * 
 	 * @param colorId
 	 */
 	public void setTitleBgColor(int colorId) {
 		this.config.titleBgColor = colorId;
 		this.config.titleBgImage = null;
+		initConfig();
 	}
 
 	/**
-	 * ÉèÖÃ±êÌâ±³¾°Í¼
+	 * è®¾ç½®æ ‡é¢˜èƒŒæ™¯å›¾
 	 * 
 	 * @param resourceId
 	 */
 	public void setTitleBgImage(int resourceId) {
 		setTitleBgImage(getContext().getResources().getDrawable(resourceId));
+		initConfig();
 	}
 
 	/**
-	 * ÉèÖÃ±êÌâ±³¾°Í¼
+	 * è®¾ç½®æ ‡é¢˜èƒŒæ™¯å›¾
 	 * 
 	 * @param bitmap
 	 */
 	public void setTitleBgImage(Bitmap bitmap) {
 		setTitleBgImage(new BitmapDrawable(getContext().getResources(), bitmap));
+		initConfig();
 	}
 
 	/**
-	 * ÉèÖÃ±êÌâ±³¾°Í¼
+	 * è®¾ç½®æ ‡é¢˜èƒŒæ™¯å›¾
 	 * 
 	 * @param drawable
 	 */
 	public void setTitleBgImage(Drawable drawable) {
 		this.config.titleBgImage = drawable;
 		this.config.titleBgColor = Integer.MAX_VALUE;
+		initConfig();
 	}
 
 	/**
-	 * ÉèÖÃÕıÎÄ±³¾°Í¼
+	 * è®¾ç½®æ­£æ–‡èƒŒæ™¯å›¾
 	 * 
 	 * @param resourceId
 	 */
 	public void setContentBgImage(int resourceId) {
 		setContentBgImage(getContext().getResources().getDrawable(resourceId));
+		initConfig();
 	}
 
 	/**
-	 * ÉèÖÃÕıÎÄ±³¾°Í¼
+	 * è®¾ç½®æ­£æ–‡èƒŒæ™¯å›¾
 	 * 
 	 * @param bitmap
 	 */
 	public void setContentBgImage(Bitmap bitmap) {
 		setContentBgImage(new BitmapDrawable(getContext().getResources(), bitmap));
+		initConfig();
 	}
 
 	/**
-	 * ÉèÖÃÕıÎÄ±³¾°Í¼
+	 * è®¾ç½®æ­£æ–‡èƒŒæ™¯å›¾
 	 * 
 	 * @param drawable
 	 */
 	public void setContentBgImage(Drawable drawable) {
 		this.config.contentBgImage = drawable;
 		this.config.contentBgColor = Integer.MAX_VALUE;
+		initConfig();
 	}
 
 	/**
-	 * ÉèÖÃÕıÎÄ±³¾°ÑÕÉ«
+	 * è®¾ç½®æ­£æ–‡èƒŒæ™¯é¢œè‰²
 	 * 
 	 * @param colorString
 	 */
 	public void setContentBgColor(String colorString) {
 		setContentBgColor(Color.parseColor(colorString));
+		initConfig();
 	}
 
 	/**
-	 * ÉèÖÃÕıÎÄ±³¾°ÑÕÉ«
+	 * è®¾ç½®æ­£æ–‡èƒŒæ™¯é¢œè‰²
 	 * 
 	 * @param colorId
 	 */
 	public void setContentBgColor(int colorId) {
 		this.config.contentBgColor = colorId;
 		this.config.contentBgImage = null;
+		initConfig();
 	}
 
 	/**
-	 * ÉèÖÃ¶Ô»°¿ò¿í¸ß±ÈÀı
+	 * è®¾ç½®å¯¹è¯æ¡†å®½é«˜æ¯”ä¾‹
 	 * 
 	 * @param wp
 	 * @param hp
@@ -365,18 +393,18 @@ public class CustomDialog extends Dialog {
 	}
 
 	/**
-	 * ÉèÖÃ¶Ô»°¿òÈ«ÆÁ
+	 * è®¾ç½®å¯¹è¯æ¡†å…¨å±
 	 */
 	public void setFullScreen() {
 		setSizePercent(1.0f, 1.0f);
 	}
 
 	/**
-	 * ÉèÖÃ¶Ô»°¿ò°ëÆÁ
+	 * è®¾ç½®å¯¹è¯æ¡†åŠå±
 	 */
 	public void setHalfScreen() {
 		setSizePercent(0.5f, 0.5f);
 	}
-	// ¶Ô»°¿òÅäÖÃ-end
+	// å¯¹è¯æ¡†é…ç½®-end
 
 }

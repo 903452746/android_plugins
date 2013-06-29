@@ -6,7 +6,7 @@ import cn.com.lowe.android.R;
 import cn.com.lowe.android.app.InjectActivity;
 
 public class ThreadTestActivity extends InjectActivity {
-
+	private String test ="111111";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -15,7 +15,7 @@ public class ThreadTestActivity extends InjectActivity {
 	
 	public void testThread(View view){
 		ThreadDemo thread =new ThreadDemo(this);
-		thread.execute(ThreadDemo.threadrun,"");
+		thread.execute(ThreadDemo.threadrun,test);
 	}
 	public void testNoProgressThread(View view){
 		ThreadDemo thread =new ThreadDemo(this);
@@ -46,5 +46,9 @@ public class ThreadTestActivity extends InjectActivity {
 	public void testMethodNameFailThread(View view){
 		ThreadDemo thread =new ThreadDemo(this);
 		thread.execute("threadrun");
+	}
+	public void testSpeciallThread(View view){
+		ThreadDemo thread =new ThreadDemo(this);
+		thread.execute(ThreadDemo.threadspeciallrun,test);
 	}
 }

@@ -6,10 +6,15 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.camera" />
+
     <application
-        android:allowBackup="true"
         android:name="cn.com.lowe.android.app.InjectApplication"
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
@@ -20,9 +25,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-         <activity android:name="cn.com.test.BeanActivity" />
-         <activity android:name="cn.com.test.TestInjectActivity" />
-          <activity android:name="cn.com.lowe.android.tools.thead.ThreadTestActivity" />
+        <activity android:name="cn.com.test.BeanActivity" />
+        <activity android:name="cn.com.test.TestInjectActivity" />
+        <activity android:name="cn.com.lowe.android.tools.thead.ThreadTestActivity" />
+        <activity android:name="cn.com.lowe.android.view.ViewTestActivity" />
+        <activity android:name="cn.com.lowe.android.widget.camera.CameraActivity" />
     </application>
 
 </manifest>

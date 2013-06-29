@@ -33,24 +33,43 @@
         android:layout_height="wrap_content"
         android:onClick="showCustomListenerDialog"
         android:text="用监听创建对话框" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="testBean"
         android:text="测试ORM" />
-        <Button
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="testThread"
         android:text="测试线程" />
-          <Button
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="testInjectActivity"
         android:text="测试Activity注入" />
-                  <Button
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="testThread"
         android:text="测试线程" />
+   <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="testView"
+        android:text="view控件测试" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="getSysFile"
+        android:text="获取应用相关路径" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="takePhoto"
+        android:text="相机测试" />
 </LinearLayout>

@@ -7,10 +7,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
-* @Description: InterruptThread 调用方法注解标记
+* @Description: InterruptThread 璋冪敤鏂规硶娉ㄨВ鏍囪
 *
 * @Author zhengjin 
-* @Date 2013-6-22 下午8:13:57
+* @Date 2013-6-22 涓嬪崍8:13:57
 * @Version 1.0
 */
 @Documented

@@ -51,5 +51,10 @@
         android:layout_height="wrap_content"
         android:onClick="testMethodNameFailThread"
         android:text="方法名方式调用线程失败测试" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="testSpeciallThread"
+        android:text="测试调用线程的Activity销毁后，线程没停止，却调用activity中的变量的情况" />
 
 </LinearLayout>

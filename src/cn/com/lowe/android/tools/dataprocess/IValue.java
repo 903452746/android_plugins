@@ -3,7 +3,7 @@ package cn.com.lowe.android.tools.dataprocess;
 import android.view.View;
 
 /**
- * �ֶ�ȡֵ�ӿ�
+ * 字段取值接口
  * 
  * @author zhengjin
  * 
@@ -11,19 +11,19 @@ import android.view.View;
 public interface IValue {
 
 	/**
-	 * �ֶ�ȡֵ
+	 * 字段取值
 	 * 
 	 * @param view
-	 *            �ֶζ�ӦView
+	 *            字段对应View
 	 * @param clazz
-	 *            �ֶ�����
+	 *            字段类型
 	 * @param splitFlag
 	 * @return
 	 */
 	public Object getValue(View view, Class<?> clazz) throws Exception;
 
 	/**
-	 * �ֶ�ȡ�ֶδ�
+	 * 字段取字段串
 	 * 
 	 * @param view
 	 * @return
@@ -31,23 +31,23 @@ public interface IValue {
 	public String getValueStr(View view);
 
 	/**
-	 * �ֶθ�ֵ
+	 * 字段赋值
 	 * 
 	 * @param value
-	 *            �ֶ�ֵ
+	 *            字段值
 	 * @param view
-	 *            �ֶζ�ӦView
+	 *            字段对应View
 	 * @return
 	 */
 	public boolean setValue(Object value, View view, String splitFlag);
 
 	/**
-	 * �ַ�ֵת�ֶ�ֵ
+	 * 字符值转字段值
 	 * 
 	 * @param value
-	 *            �ֶ�ֵ
+	 *            字段值
 	 * @param clazz
-	 *            �ֶ�����
+	 *            字段类型
 	 * @param splitFlag
 	 * @return
 	 */

@@ -11,15 +11,16 @@ import android.text.TextUtils;
 import android.view.View;
 
 /**
- * Ä¬ÈÏĞ£ÑéÆ÷
+ * é»˜è®¤æ ¡éªŒå™¨
+ * 
  * @author zhengjin
- *
+ * 
  */
 public class ValidationUtil implements IValidation {
 	private SimpleDateFormat fmt = new SimpleDateFormat();
 
 	@Override
-	public String[] check(String fieldName, Class<?> fieldClass, View fieldView, FieldProperty fieldAnno, String tipName,IValue iValue) {
+	public String[] check(String fieldName, Class<?> fieldClass, View fieldView, FieldProperty fieldAnno, String tipName, IValue iValue) {
 		StringBuilder sb = new StringBuilder();
 		String value = iValue.getValueStr(fieldView);
 		if (fieldAnno.required()) {
@@ -29,7 +30,7 @@ public class ValidationUtil implements IValidation {
 				return new String[] { sb.toString(), value };
 			}
 		}
-		// ¿ÕÖµµÃ»°²»×öÒÔÏÂĞ£Ñé
+		// ç©ºå€¼å¾—è¯ä¸åšä»¥ä¸‹æ ¡éªŒ
 		if (TextUtils.isEmpty(value)) {
 			return new String[] { sb.toString(), value };
 		}
@@ -50,65 +51,65 @@ public class ValidationUtil implements IValidation {
 			value = null;
 			return new String[] { sb.toString(), value };
 		}
-		//Ğ£Ñé×Ö¶ÎÀàĞÍÓëÊı¾İÊÇ·ñ¿ÉÒÔ×ª»»
-		sb.append(checkFieldType(value, tipName,fieldClass));
+		// æ ¡éªŒå­—æ®µç±»å‹ä¸æ•°æ®æ˜¯å¦å¯ä»¥è½¬æ¢
+		sb.append(checkFieldType(value, tipName, fieldClass));
 		if (sb.length() > 0) {
 			value = null;
 			return new String[] { sb.toString(), value };
 		}
-		return null;
+		return new String[] { "", value };
 
 	}
 
 	/**
-	* @Title: checkFieldType
-	* @Description: Ğ£Ñé×Ö¶ÎÀàĞÍÓëÊı¾İÊÇ·ñ¿ÉÒÔ×ª»»
-	* @param @param value
-	* @param @param tipName
-	* @param @param fieldClass
-	* @param @return
-	* @return String
-	* @throws
-	*/
+	 * @Title: checkFieldType
+	 * @Description: æ ¡éªŒå­—æ®µç±»å‹ä¸æ•°æ®æ˜¯å¦å¯ä»¥è½¬æ¢
+	 * @param @param value
+	 * @param @param tipName
+	 * @param @param fieldClass
+	 * @param @return
+	 * @return String
+	 * @throws
+	 */
 	private String checkFieldType(String value, String tipName, Class<?> fieldClass) {
-		if(null==value||"".equals(value)){
+		if (null == value || "".equals(value)) {
 			return "";
-		}else if (fieldClass == String.class) {
+		} else if (fieldClass == String.class) {
 			return "";
 		} else if (fieldClass == Integer.class) {
 			try {
 				Integer.parseInt(value);
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
-				return tipName+"±ØĞëÊÇÕûÊı\n";
+				return tipName + "å¿…é¡»æ˜¯æ•´æ•°\n";
 			}
 		} else if (fieldClass == Float.class) {
 			try {
 				Float.parseFloat(value);
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
-				return tipName+"±ØĞëÊÇĞ¡Êı\n";
+				return tipName + "å¿…é¡»æ˜¯å°æ•°\n";
 			}
 		} else if (fieldClass == Double.class) {
 			try {
 				Double.parseDouble(value);
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
-				return tipName+"±ØĞëÊÇĞ¡Êı\n";
+				return tipName + "å¿…é¡»æ˜¯å°æ•°\n";
 			}
 		} else if (fieldClass == Short.class) {
 			try {
 				Short.parseShort(value);
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
-				return tipName+"±ØĞëÊÇÕûÊı\n";
+				return tipName + "å¿…é¡»æ˜¯æ•´æ•°\n";
 			}
 		} else if (fieldClass == Long.class) {
 			try {
 				Long.parseLong(value);
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
-				return tipName+"±ØĞëÊÇÕûÊı\n";
+				return tipName + "å¿…é¡»æ˜¯æ•´æ•°\n";
 			}
 		} else if (fieldClass == Boolean.class) {
 			return "";
@@ -117,7 +118,8 @@ public class ValidationUtil implements IValidation {
 	}
 
 	/**
-	 * Ğ£Ñé±í´ïÊ½
+	 * æ ¡éªŒè¡¨è¾¾å¼
+	 * 
 	 * @param value
 	 * @param tipName
 	 * @param dataExpression
@@ -129,13 +131,14 @@ public class ValidationUtil implements IValidation {
 			return "";
 		}
 		if (!value.matches(dataExpression)) {
-			return tipName  + (TextUtils.isEmpty(value) ? dataExpression : dataExpressionTip) + "µÄ¸ñÊ½\n";
+			return tipName + (TextUtils.isEmpty(value) ? dataExpression : dataExpressionTip) + "çš„æ ¼å¼\n";
 		}
 		return "";
 	}
 
 	/**
-	 * Ğ£ÑéÊı¾İÀàĞÍ
+	 * æ ¡éªŒæ•°æ®ç±»å‹
+	 * 
 	 * @param value
 	 * @param tipName
 	 * @param dataType
@@ -153,21 +156,21 @@ public class ValidationUtil implements IValidation {
 			try {
 				fmt.parse(value);
 			} catch (ParseException e) {
-				return tipName + "¸ñÊ½±ØĞëÊÇ" + dateFmt + "\n";
+				return tipName + "æ ¼å¼å¿…é¡»æ˜¯" + dateFmt + "\n";
 			}
 			break;
 		case FLOATNUMBER:
 			try {
 				Float.parseFloat(value);
 			} catch (NumberFormatException e) {
-				return tipName + "±ØĞëÊÇĞ¡ÊıÀàĞÍ\n";
+				return tipName + "å¿…é¡»æ˜¯å°æ•°ç±»å‹\n";
 			}
 			break;
 		case NUMBER:
 			try {
 				Integer.parseInt(value);
 			} catch (NumberFormatException e) {
-				return tipName + "±ØĞëÊÇÕûÊıÀàĞÍ\n";
+				return tipName + "å¿…é¡»æ˜¯æ•´æ•°ç±»å‹\n";
 			}
 			break;
 
@@ -178,21 +181,23 @@ public class ValidationUtil implements IValidation {
 	}
 
 	/**
-	 * Ğ£Ñé·Ç¿Õ
+	 * æ ¡éªŒéç©º
+	 * 
 	 * @param value
 	 * @param tipName
 	 * @return
 	 */
-	private String checkNullable(String value, String tipName) {
+	public static String checkNullable(String value, String tipName) {
 		if (TextUtils.isEmpty(value)) {
-			return tipName + "Îª±ØÌîÏî\n";
+			return tipName + "ä¸ºå¿…å¡«é¡¹\n";
 		}
 		return "";
 
 	}
 
 	/**
-	 * Ğ£Ñé³¤¶È
+	 * æ ¡éªŒé•¿åº¦
+	 * 
 	 * @param value
 	 * @param tipName
 	 * @param maxLength
@@ -202,12 +207,12 @@ public class ValidationUtil implements IValidation {
 	 */
 	private String checkLength(String value, String tipName, int maxLength, int minLength, boolean required) {
 		String note = "";
-		// ÆÁ±Î·Ç±ØÌîµÄ³¤¶ÈĞ£Ñé
+		// å±è”½éå¿…å¡«çš„é•¿åº¦æ ¡éªŒ
 		if (maxLength != Integer.MAX_VALUE && value.length() > maxLength) {
-			note += tipName + "Ó¦Ğ¡ÓÚ" + maxLength + "¸ö×Ö·û\n";
+			note += tipName + "åº”å°äº" + maxLength + "ä¸ªå­—ç¬¦\n";
 		}
 		if (minLength != Integer.MIN_VALUE && value.length() < minLength) {
-			note += tipName + "Ó¦´óÓÚ" + minLength + "¸ö×Ö·û\n";
+			note += tipName + "åº”å¤§äº" + minLength + "ä¸ªå­—ç¬¦\n";
 		}
 		return note;
 	}

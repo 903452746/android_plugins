@@ -8,21 +8,25 @@ import cn.com.lowe.android.tools.dataprocess.annotation.FieldProperty;
 import cn.com.lowe.android.tools.dataprocess.annotation.TipProperty;
 import cn.com.lowe.android.tools.dataprocess.lang.ValidationResult;
 import cn.com.lowe.android.tools.dataprocess.util.AnnotationUtil;
+import cn.com.lowe.android.tools.dataprocess.util.ErrorTipUtil;
 import cn.com.lowe.android.tools.dataprocess.util.ValidationUtil;
 import cn.com.lowe.android.tools.dataprocess.util.ValueUtil;
 import android.content.res.Resources;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
 /**
- * Êı¾İÓ³Éä¹¤¾ß
+ * æ•°æ®æ˜ å°„å·¥å…·
  * 
  * @author zhengjin
  * 
  */
 public class DataTool {
 	private static final String TAG = "DataTool";
-	// Ğ£ÑéÈ¡Öµ¶ÔÏó»º´æ
+
+	private static boolean setError = true;
+	// æ ¡éªŒå–å€¼å¯¹è±¡ç¼“å­˜
 	private static Map<Class<?>, IValue> valueInterfaceMap = new HashMap<Class<?>, IValue>();
 	private static Map<Class<?>, IValidation> validationInterfaceMap = new HashMap<Class<?>, IValidation>();
 	static {
@@ -47,12 +51,12 @@ public class DataTool {
 			if (field.isAnnotationPresent(FieldProperty.class)) {
 				fieldAnno = field.getAnnotation(FieldProperty.class);
 				if (fieldAnno.mapToViewId() == 0) {
-					Log.e(TAG, fieldName + ":Î´ÉèÖÃFieldProperty.mapToViewIdÊôĞÔ£¬ÎŞ·¨ÕÒµ½¶ÔÓ¦View");
+					Log.e(TAG, fieldName + ":æœªè®¾ç½®FieldProperty.mapToViewIdå±æ€§ï¼Œæ— æ³•æ‰¾åˆ°å¯¹åº”View");
 					continue;
 				}
 				fieldView = validView.findViewById(fieldAnno.mapToViewId());
 				if (fieldView == null) {
-					Log.e(TAG, fieldName + ":¸ù¾İFieldProperty.mapToViewIdÊôĞÔ£¬ÎŞ·¨ÕÒµ½¶ÔÓ¦View");
+					Log.e(TAG, fieldName + ":æ ¹æ®FieldProperty.mapToViewIdå±æ€§ï¼Œæ— æ³•æ‰¾åˆ°å¯¹åº”View");
 					continue;
 				}
 				tipAnno = field.getAnnotation(TipProperty.class);
@@ -60,31 +64,31 @@ public class DataTool {
 
 				IValidation iValidation = validationInterfaceMap.get(fieldAnno.validationClass());
 
-				// ±ÜÃâÖØ¸´´´½¨Ä¬ÈÏĞ£Ñé¶ÔÏó
+				// é¿å…é‡å¤åˆ›å»ºé»˜è®¤æ ¡éªŒå¯¹è±¡
 				if (iValidation == null) {
 					try {
 						iValidation = (IValidation) fieldAnno.validationClass().newInstance();
 						validationInterfaceMap.put(fieldAnno.validationClass(), iValidation);
 					} catch (InstantiationException e) {
-						Log.e(TAG, fieldName + ":¸ù¾İFieldProperty.validationClassÊôĞÔ£¬ÎŞ²Î¹¹Ôìº¯Êı²»´æÔÚ");
+						Log.e(TAG, fieldName + ":æ ¹æ®FieldProperty.validationClasså±æ€§ï¼Œæ— å‚æ„é€ å‡½æ•°ä¸å­˜åœ¨");
 						continue;
 					} catch (IllegalAccessException e) {
-						Log.e(TAG, fieldName + ":¸ù¾İFieldProperty.validationClassÊôĞÔ£¬Àà²»´æÔÚ");
+						Log.e(TAG, fieldName + ":æ ¹æ®FieldProperty.validationClasså±æ€§ï¼Œç±»ä¸å­˜åœ¨");
 						continue;
 					}
 
 				}
 				IValue iValue = valueInterfaceMap.get(fieldAnno.valueConstructClass());
-				// ±ÜÃâÖØ¸´´´½¨Ä¬ÈÏÈ¡Öµ¶ÔÏó
+				// é¿å…é‡å¤åˆ›å»ºé»˜è®¤å–å€¼å¯¹è±¡
 				if (iValue == null) {
 					try {
 						iValue = (IValue) fieldAnno.valueConstructClass().newInstance();
 						valueInterfaceMap.put(fieldAnno.valueConstructClass(), iValue);
 					} catch (InstantiationException e) {
-						Log.e(TAG, fieldName + ":¸ù¾İFieldProperty.valueConstructClassÊôĞÔ£¬ÎŞ²Î¹¹Ôìº¯Êı²»´æÔÚ");
+						Log.e(TAG, fieldName + ":æ ¹æ®FieldProperty.valueConstructClasså±æ€§ï¼Œæ— å‚æ„é€ å‡½æ•°ä¸å­˜åœ¨");
 						continue;
 					} catch (IllegalAccessException e) {
-						Log.e(TAG, fieldName + ":¸ù¾İFieldProperty.valueConstructClassÊôĞÔ£¬Àà²»´æÔÚ");
+						Log.e(TAG, fieldName + ":æ ¹æ®FieldProperty.valueConstructClasså±æ€§ï¼Œç±»ä¸å­˜åœ¨");
 						continue;
 					}
 				}
@@ -93,10 +97,13 @@ public class DataTool {
 				if (ss != null && ss.length == 2) {
 					errorBuf.append(ss[0]);
 					entity.put(fieldName, ss[1]);
+					if (setError && !TextUtils.isEmpty(ss[0])) {
+						ErrorTipUtil.setError(fieldView, ss[0]);
+					}
 				}
 
 			} else {
-				Log.d(TAG, fieldName + ":Î´ÉèÖÃFieldProperty×¢½â");
+				Log.d(TAG, fieldName + ":æœªè®¾ç½®FieldPropertyæ³¨è§£");
 			}
 		}
 		ValidationResult vr = new ValidationResult();
@@ -105,13 +112,13 @@ public class DataTool {
 			vr.note = errorBuf.toString();
 		} else {
 			vr.success = true;
-			vr.entity=entity;
+			vr.entity = entity;
 		}
 		return vr;
 
 	}
 
-	public static Object getEntity(Class<?> entityClazz, View validView,ValidationResult validationResult) throws IllegalAccessException, InstantiationException {
+	public static Object getEntity(Class<?> entityClazz, View validView, ValidationResult validationResult) throws IllegalAccessException, InstantiationException {
 		Field[] fields = entityClazz.getDeclaredFields();
 		FieldProperty fieldAnno;
 		String fieldName;
@@ -120,16 +127,16 @@ public class DataTool {
 		Map<String, String> entity = validationResult.entity;
 		boolean entityIsNull = (entity == null);
 		if (entityIsNull) {
-			Log.d(TAG, entityClazz.getName() + "È¡Öµ¹ı³ÌÖĞÎ´·¢ÏÖ»º´æÊı¾İ");
+			Log.d(TAG, entityClazz.getName() + "å–å€¼è¿‡ç¨‹ä¸­æœªå‘ç°ç¼“å­˜æ•°æ®");
 		}
 		Object o = null;
 		try {
 			o = entityClazz.newInstance();
 		} catch (InstantiationException e) {
-			Log.e(TAG, entityClazz.getName() + "ÎŞ²Î¹¹Ôìº¯Êı²»´æÔÚ");
+			Log.e(TAG, entityClazz.getName() + "æ— å‚æ„é€ å‡½æ•°ä¸å­˜åœ¨");
 			throw e;
 		} catch (IllegalAccessException e) {
-			Log.e(TAG, entityClazz.getName() + "Àà²»´æÔÚ");
+			Log.e(TAG, entityClazz.getName() + "ç±»ä¸å­˜åœ¨");
 			throw e;
 		}
 		for (Field field : fields) {
@@ -138,25 +145,25 @@ public class DataTool {
 			if (field.isAnnotationPresent(FieldProperty.class)) {
 				fieldAnno = field.getAnnotation(FieldProperty.class);
 				if (fieldAnno.mapToViewId() == 0) {
-					Log.e(TAG, fieldName + ":Î´ÉèÖÃFieldProperty.mapToViewIdÊôĞÔ£¬ÎŞ·¨ÕÒµ½¶ÔÓ¦View");
+					Log.e(TAG, fieldName + ":æœªè®¾ç½®FieldProperty.mapToViewIdå±æ€§ï¼Œæ— æ³•æ‰¾åˆ°å¯¹åº”View");
 					continue;
 				}
 				fieldView = validView.findViewById(fieldAnno.mapToViewId());
 				if (fieldView == null) {
-					Log.e(TAG, fieldName + ":¸ù¾İFieldProperty.mapToViewIdÊôĞÔ£¬ÎŞ·¨ÕÒµ½¶ÔÓ¦View");
+					Log.e(TAG, fieldName + ":æ ¹æ®FieldProperty.mapToViewIdå±æ€§ï¼Œæ— æ³•æ‰¾åˆ°å¯¹åº”View");
 					continue;
 				}
 				IValue iValue = valueInterfaceMap.get(fieldAnno.valueConstructClass());
-				// ±ÜÃâÖØ¸´´´½¨Ä¬ÈÏÈ¡Öµ¶ÔÏó
+				// é¿å…é‡å¤åˆ›å»ºé»˜è®¤å–å€¼å¯¹è±¡
 				if (iValue == null) {
 					try {
 						iValue = (IValue) fieldAnno.valueConstructClass().newInstance();
 						valueInterfaceMap.put(fieldAnno.valueConstructClass(), iValue);
 					} catch (InstantiationException e) {
-						Log.e(TAG, fieldName + ":¸ù¾İFieldProperty.valueConstructClassÊôĞÔ£¬ÎŞ²Î¹¹Ôìº¯Êı²»´æÔÚ");
+						Log.e(TAG, fieldName + ":æ ¹æ®FieldProperty.valueConstructClasså±æ€§ï¼Œæ— å‚æ„é€ å‡½æ•°ä¸å­˜åœ¨");
 						continue;
 					} catch (IllegalAccessException e) {
-						Log.e(TAG, fieldName + ":¸ù¾İFieldProperty.valueConstructClassÊôĞÔ£¬Àà²»´æÔÚ");
+						Log.e(TAG, fieldName + ":æ ¹æ®FieldProperty.valueConstructClasså±æ€§ï¼Œç±»ä¸å­˜åœ¨");
 						continue;
 					}
 				}
@@ -170,12 +177,12 @@ public class DataTool {
 						value = iValue.getValue(fieldView, fieldClass);
 					}
 				} catch (Exception e) {
-					Log.e(TAG, fieldName + "ÄÚÈİ²»¿É×ª»»Îª"+fieldClass+"¶ÔÏó", e);
+					Log.e(TAG, fieldName + "å†…å®¹ä¸å¯è½¬æ¢ä¸º" + fieldClass + "å¯¹è±¡", e);
 				}
 				field.setAccessible(true);
 				field.set(o, value);
 			} else {
-				Log.d(TAG, fieldName + ":Î´ÉèÖÃFieldProperty×¢½â");
+				Log.d(TAG, fieldName + ":æœªè®¾ç½®FieldPropertyæ³¨è§£");
 			}
 
 		}
@@ -193,25 +200,25 @@ public class DataTool {
 			if (field.isAnnotationPresent(FieldProperty.class)) {
 				fieldAnno = field.getAnnotation(FieldProperty.class);
 				if (fieldAnno.mapToViewId() == 0) {
-					Log.e(TAG, fieldName + ":Î´ÉèÖÃFieldProperty.mapToViewIdÊôĞÔ£¬ÎŞ·¨ÕÒµ½¶ÔÓ¦View");
+					Log.e(TAG, fieldName + ":æœªè®¾ç½®FieldProperty.mapToViewIdå±æ€§ï¼Œæ— æ³•æ‰¾åˆ°å¯¹åº”View");
 					continue;
 				}
 				fieldView = validView.findViewById(fieldAnno.mapToViewId());
 				if (fieldView == null) {
-					Log.e(TAG, fieldName + ":¸ù¾İFieldProperty.mapToViewIdÊôĞÔ£¬ÎŞ·¨ÕÒµ½¶ÔÓ¦View");
+					Log.e(TAG, fieldName + ":æ ¹æ®FieldProperty.mapToViewIdå±æ€§ï¼Œæ— æ³•æ‰¾åˆ°å¯¹åº”View");
 					continue;
 				}
 				IValue iValue = valueInterfaceMap.get(fieldAnno.valueConstructClass());
-				// ±ÜÃâÖØ¸´´´½¨Ä¬ÈÏÈ¡Öµ¶ÔÏó
+				// é¿å…é‡å¤åˆ›å»ºé»˜è®¤å–å€¼å¯¹è±¡
 				if (iValue == null) {
 					try {
 						iValue = (IValue) fieldAnno.valueConstructClass().newInstance();
 						valueInterfaceMap.put(fieldAnno.valueConstructClass(), iValue);
 					} catch (InstantiationException e) {
-						Log.e(TAG, fieldName + ":¸ù¾İFieldProperty.valueConstructClassÊôĞÔ£¬ÎŞ²Î¹¹Ôìº¯Êı²»´æÔÚ");
+						Log.e(TAG, fieldName + ":æ ¹æ®FieldProperty.valueConstructClasså±æ€§ï¼Œæ— å‚æ„é€ å‡½æ•°ä¸å­˜åœ¨");
 						continue;
 					} catch (IllegalAccessException e) {
-						Log.e(TAG, fieldName + ":¸ù¾İFieldProperty.valueConstructClassÊôĞÔ£¬Àà²»´æÔÚ");
+						Log.e(TAG, fieldName + ":æ ¹æ®FieldProperty.valueConstructClasså±æ€§ï¼Œç±»ä¸å­˜åœ¨");
 						continue;
 					}
 				}
@@ -220,15 +227,15 @@ public class DataTool {
 				try {
 					o = field.get(entity);
 				} catch (IllegalArgumentException e) {
-					Log.e(TAG, fieldName + "ÊôĞÔ²»´æÔÚ");
+					Log.e(TAG, fieldName + "å±æ€§ä¸å­˜åœ¨");
 					continue;
 				} catch (IllegalAccessException e) {
-					Log.e(TAG, fieldName + "ÊôĞÔ²»¿É¼û");
+					Log.e(TAG, fieldName + "å±æ€§ä¸å¯è§");
 					continue;
 				}
 				iValue.setValue(o, fieldView, fieldAnno.arrySplitFlag());
 			} else {
-				Log.d(TAG, fieldName + ":Î´ÉèÖÃFieldProperty×¢½â");
+				Log.d(TAG, fieldName + ":æœªè®¾ç½®FieldPropertyæ³¨è§£");
 			}
 
 		}

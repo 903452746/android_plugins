@@ -1,11 +1,11 @@
 package cn.com.lowe.android.tools.dataprocess.lang;
 
 public enum DataType{
-	TEXT,//ÎÄ±¾
-	DATE,//ÈÕÆÚ
-	DATETIME,//ÈÕÆÚÊ±¼ä
-	TIME,//Ê±¼ä
-	NUMBER,//ÊıÖµĞÍ
-	FLOATNUMBER,//Ğ¡ÊıĞÍ
+	TEXT,//æ–‡æœ¬
+	DATE,//æ—¥æœŸ
+	DATETIME,//æ—¥æœŸæ—¶é—´
+	TIME,//æ—¶é—´
+	NUMBER,//æ•°å€¼å‹
+	FLOATNUMBER,//å°æ•°å‹
 		
 }
