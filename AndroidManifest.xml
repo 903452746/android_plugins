@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -31,6 +33,7 @@
         <activity android:name="cn.com.lowe.android.tools.thead.ThreadTestActivity" />
         <activity android:name="cn.com.lowe.android.view.ViewTestActivity" />
         <activity android:name="cn.com.lowe.android.widget.camera.CameraActivity" />
+        <activity android:name="cn.com.lowe.android.tools.net.NetTestActivity" />
     </application>
 
 </manifest>

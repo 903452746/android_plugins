@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 
 import cn.com.lowe.android.R;
 import cn.com.lowe.android.tools.dataprocess.BeanActivity;
+import cn.com.lowe.android.tools.net.NetTestActivity;
 import cn.com.lowe.android.tools.thead.ThreadTestActivity;
 import cn.com.lowe.android.view.ViewTestActivity;
 import cn.com.lowe.android.widget.camera.CameraActivity;
@@ -176,6 +177,10 @@ public class TestActivity extends Activity implements Callback {
 	
 	public void takePhoto(View view){
 		Intent intent = new Intent(this, CameraActivity.class);
+		this.startActivity(intent);
+	}
+	public void takeNet(View view){
+		Intent intent = new Intent(this, NetTestActivity.class);
 		this.startActivity(intent);
 	}
 }
