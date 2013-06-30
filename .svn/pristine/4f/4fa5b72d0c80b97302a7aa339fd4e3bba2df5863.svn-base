@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 属性 BEGIN -->
+    <!-- DateEditText  属性 -->
+    <declare-styleable name="DateEditText">
+        <attr name="pattern" format="string" />
+        <attr name="dateType">
+            <enum name="date" value="1" />
+            <enum name="time" value="2" />
+            <enum name="datetime" value="3" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="DictEditText">
+        <attr name="multiple" format="boolean" />
+        <attr name="maxselect" format="integer" />
+        <attr name="multipleItemLayout" format="reference" />
+        <attr name="singleItemLayout" format="reference" />
+        <attr name="textViewId" format="reference" />
+        <attr name="itemformate">
+            <enum name="fmt_111111" value="1" />
+            <enum name="fmt_001100" value="2" />
+        </attr>
+    </declare-styleable>
+    <!-- 属性 END -->
+    <!-- 字符 BEGIN -->
+    <string name="date_picker_dialog_title">设置时间</string>
+    <string name="cancel">清空</string>
+    <string name="date_time_set">确定</string>
+    <!-- 字符 END -->
+
+
+    <!-- 样式   BEGIN -->
+    <style name="date_dialog_theme_api_10" parent="@android:style/Theme.Dialog">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+    <!-- 样式   END -->
+
+</resources>

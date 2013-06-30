@@ -1,0 +1,36 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cn.com.lowe.android"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera" />
+
+    <application
+        android:name="cn.com.lowe.android.app.InjectApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity android:name="cn.com.test.TestActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="cn.com.lowe.android.tools.dataprocess.BeanActivity" />
+        <activity android:name="cn.com.test.TestInjectActivity" />
+        <activity android:name="cn.com.lowe.android.tools.thead.ThreadTestActivity" />
+        <activity android:name="cn.com.lowe.android.view.ViewTestActivity" />
+        <activity android:name="cn.com.lowe.android.widget.camera.CameraActivity" />
+    </application>
+
+</manifest>
