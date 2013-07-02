@@ -76,7 +76,7 @@ public abstract class JsonHttpResponseHandler extends HttpResponseHandler {
 			HttpEntity temp = response.getEntity();
 			if (temp != null) {
 				entity = new BufferedHttpEntity(temp);
-				responseBody = EntityUtils.toString(entity, "UTF-8");
+				responseBody = EntityUtils.toString(entity, ENCODING);
 			}
 		} catch (IOException e) {
 			sendFailureMessage(e, (String) null);

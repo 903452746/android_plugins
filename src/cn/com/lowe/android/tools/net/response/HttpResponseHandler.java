@@ -71,6 +71,7 @@ public abstract class HttpResponseHandler {
 	protected static final int FINISH_MESSAGE = 3;
 
 	private Handler handler;
+	protected String ENCODING = "UTF-8";
 
 	/**
 	 * Creates a new AsyncHttpResponseHandler
@@ -130,7 +131,7 @@ public abstract class HttpResponseHandler {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					Log.d(TAG, "network handler work["+msg.what+"]");
+					Log.d(TAG, "network handler work[" + msg.what + "]");
 					handleMessage(msg);
 				}
 			});

@@ -57,7 +57,7 @@ import cn.com.lowe.android.tools.net.lang.SimpleMultipartEntity;
  * </pre>
  */
 public class RequestParams {
-    private static String ENCODING = "UTF-8";
+    private  String ENCODING = "UTF-8";
 
     protected ConcurrentHashMap<String, String> urlParams;
     protected ConcurrentHashMap<String, FileWrapper> fileParams;
@@ -66,11 +66,24 @@ public class RequestParams {
     /**
      * Constructs a new empty <code>RequestParams</code> instance.
      */
-    public RequestParams() {
+    public RequestParams(String ENCODING) {
+    	this.ENCODING=ENCODING;
         init();
     }
+    
+    public RequestParams() {
+    	 init();
+	}
 
-    /**
+	public String getENCODING() {
+		return ENCODING;
+	}
+
+	public void setENCODING(String eNCODING) {
+		ENCODING = eNCODING;
+	}
+
+	/**
      * Constructs a new RequestParams instance containing the key/value
      * string params from the specified map.
      * @param source the source key/value string map to add.
@@ -232,7 +245,7 @@ public class RequestParams {
         HttpEntity entity = null;
 
         if(!fileParams.isEmpty()) {
-            SimpleMultipartEntity multipartEntity = new SimpleMultipartEntity();
+            SimpleMultipartEntity multipartEntity = new SimpleMultipartEntity(ENCODING);
 
             // Add string params
             for(ConcurrentHashMap.Entry<String, String> entry : urlParams.entrySet()) {

@@ -56,7 +56,7 @@ import org.apache.http.util.EntityUtils;
  */
 public abstract class BinaryHttpResponseHandler extends HttpResponseHandler {
 	// Allow images by default
-	private static String[] mAllowedContentTypes = new String[] { "image/jpeg", "image/png" };
+	private static String[] mAllowedContentTypes = new String[] {"application/octet-stream" };
 
 	public BinaryHttpResponseHandler() {
 		super();

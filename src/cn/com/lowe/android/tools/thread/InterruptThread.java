@@ -116,13 +116,25 @@ public abstract class InterruptThread extends Thread {
 	 * @return void
 	 */
 	public final void execute(String executeMethodName, Object... params) {
-		Class<?>[] paramTypes = new Class<?>[params.length];
-		for (int i = 0, length = paramTypes.length; i < length; i++) {
-			paramTypes[i] = params[i].getClass();
+		Method[] methods = childClass.getMethods();
+		for (Method method : methods) {
+			if (!method.getName().equals(executeMethodName)) {
+				continue;
+			}
+			Class<?>[] paramTypes = method.getParameterTypes();
+			if (paramTypes.length != params.length) {
+				continue;
+			}
+			for (int i = 0, len = paramTypes.length; i < len; i++) {
+				try {
+					paramTypes[i].cast(params[i]);
+				} catch (ClassCastException e) {
+					continue;
+				}
+			}
+			executeMethod = method;
 		}
-		try {
-			executeMethod = childClass.getMethod(executeMethodName, paramTypes);
-		} catch (NoSuchMethodException e) {
+		if (executeMethod == null) {
 			throw new ThreadMehtodException("后台线程执行函数[" + executeMethodName + "]不存在");
 		}
 		this.params = params;

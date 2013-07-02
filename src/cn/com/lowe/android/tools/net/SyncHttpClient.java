@@ -109,15 +109,13 @@ public class SyncHttpClient {
 		ConnManagerParams.setTimeout(httpParams, socketTimeout);
 		ConnManagerParams.setMaxConnectionsPerRoute(httpParams, new ConnPerRouteBean(maxConnections));
 		ConnManagerParams.setMaxTotalConnections(httpParams, DEFAULT_MAX_CONNECTIONS);
-
 		HttpConnectionParams.setSoTimeout(httpParams, socketTimeout);
 		HttpConnectionParams.setConnectionTimeout(httpParams, socketTimeout);
 		HttpConnectionParams.setTcpNoDelay(httpParams, true);
 		HttpConnectionParams.setSocketBufferSize(httpParams, DEFAULT_SOCKET_BUFFER_SIZE);
-
 		HttpProtocolParams.setVersion(httpParams, HttpVersion.HTTP_1_1);
-		HttpProtocolParams.setUserAgent(httpParams, String.format("android-async-http/%s (http://loopj.com/android-async-http)", VERSION));
-
+		HttpProtocolParams.setUserAgent(httpParams, String.format("android-async-http/%s", VERSION));
+		
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
 		schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
@@ -136,7 +134,6 @@ public class SyncHttpClient {
 				}
 			}
 		});
-
 		httpClient.addResponseInterceptor(new HttpResponseInterceptor() {
 			@Override
 			public void process(HttpResponse response, HttpContext context) {
@@ -144,7 +141,6 @@ public class SyncHttpClient {
 				if (entity == null) {
 					return;
 				}
-				Header[] headers= response.getAllHeaders();
 				final Header encoding = entity.getContentEncoding();
 				if (encoding != null) {
 					for (HeaderElement element : encoding.getElements()) {
